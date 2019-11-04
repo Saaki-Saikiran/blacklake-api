@@ -76,4 +76,4 @@ var meters = mongoose.Schema({
     strict: true
 });
 
-module.exports = mongoose.main.model("departvehicles", departvehicles);
+module.exports = mongoose.model("meters", meters);

@@ -90,4 +90,4 @@ users.index({
     unique: true
 });
 
-module.exports = mongoose.main.model("users", users);
+module.exports = mongoose.model("users", users);

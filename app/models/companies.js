@@ -38,4 +38,4 @@ companies.index({
     unique: true
 });
 
-module.exports = mongoose.main.model("companies", companies);
+module.exports = mongoose.model("companies", companies);
