@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+    body {
+        font-family: arial, sans-serif;
+    }
+
+    table {
+        overflow: auto;
+        word-wrap: break-word;
+        border-right: 0.5px solid black;
+        border-collapse: collapse;
+    }
+
+    td {
+        border-left: 1.0px solid black;
+        border-right: 1.0px solid black;
+        font-size: 9px;
+        border-width: 1px !important;
+    }
+
+    tr {
+        border-bottom: 1px solid black;
+    }
+
+    th {
+        border: 1px solid black;
+        font-size: 10px;
+        font-weight: 350;
+        text-align: left;
+    }
+
+    .border-none {
+        border-top: none;
+        border-left: none;
+        border-right: none;
+    }
+
+    table {
+        counter-reset: section;
+    }
+
+    .count:before {
+        counter-increment: section;
+        content: counter(section);
+    }
+    </style>
+</head>
+
+<body>
+    <table style="border-bottom: none;border-right: none">
+        <tr class="border-none" style="border-bottom: none">
+            <th class="border-none" style="border-bottom: none;">{{title}}</th>
+        </tr>
+    </table>
+    <table style="width: 100%" cellpadding="3" cellspacing="3">
+        <tr>
+            <th>Sl.No</th>
+            <th>Chassis No</th>
+            <th>Engine No</th>
+            <th>Product Date</th>
+            <th>QR Code </th>
+            
+        </tr>
+        {{#data}}
+        <tr>
+            <td class="count"></td>
+            <td>{{chassisNo}}</td>
+            <td>{{engineNo}}</td>
+            <td>{{productDate}}</td>
+            <td><img style="height: 100px" src={{url}}/></td>
+        </tr>
+        {{/data}}
+    </table>
+</body>
+
+</html>
