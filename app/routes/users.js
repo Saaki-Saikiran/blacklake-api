@@ -308,37 +308,45 @@ router.post('/auth/login', function (req, res, next) {
                     result.errors.push(err.message);
                     return res.json(result);
                 } else if (resUser) {
-                    bcrypt.compare(data.password, resUser.password, function (err, isValid) {
-                        if (err) {
-                            result.errors.push(err);
-                            return res.json(result);
-                        } else if (isValid) {
-                            delete resUser.password;
-                            if (resUser.active) {
-                                jwt.sign({
-                                    resUser
-                                }, secretkey, {
-                                    expiresIn: tokenExpireTime
-                                }, function (err, token) {
-                                    if (err) {
-                                        result.errors.push(err);
-                                        return res.json(result);
-                                    } else {
-                                        result.success = true;
-                                        result.result.push(resUser);
-                                        result.token = token;
-                                        return res.json(result);
-                                    }
-                                })
+                    let date = new Date();
+                    let dateDiff = ((date.getTime() - resUser.createdOn.getTime()) / (1000 * 3600 * 24));
+                    console.log('dateDiff---->', dateDiff);
+                    if ((dateDiff / (1000 * 3600 * 24)) <= 30) {
+                        bcrypt.compare(data.password, resUser.password, function (err, isValid) {
+                            if (err) {
+                                result.errors.push(err);
+                                return res.json(result);
+                            } else if (isValid) {
+                                delete resUser.password;
+                                if (resUser.active) {
+                                    jwt.sign({
+                                        resUser
+                                    }, secretkey, {
+                                        expiresIn: tokenExpireTime
+                                    }, function (err, token) {
+                                        if (err) {
+                                            result.errors.push(err);
+                                            return res.json(result);
+                                        } else {
+                                            result.success = true;
+                                            result.result.push(resUser);
+                                            result.token = token;
+                                            return res.json(result);
+                                        }
+                                    })
+                                } else {
+                                    result.errors.push("Your account has been deactivated, Kindly contact administrator.");
+                                    return res.json(result);
+                                }
                             } else {
-                                result.errors.push("Your account has been deactivated, Kindly contact administrator.");
+                                result.errors.push("Invalid Credentials-------------");
                                 return res.json(result);
                             }
-                        } else {
-                            result.errors.push("Invalid Credentials-------------");
-                            return res.json(result);
-                        }
-                    })
+                        })
+                    } else {
+                        result.errors.push("Exceeded The Trail Period, Kindly contact administrator");
+                        return res.json(result);
+                    }
                 } else {
                     result.errors.push("Invalid Credentials");
                     return res.json(result);
