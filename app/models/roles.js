@@ -26,7 +26,7 @@ var roles = mongoose.Schema({
             add: {
                 type: Boolean
             },
-            edit: {
+            update: {
                 type: Boolean
             },
             link: {

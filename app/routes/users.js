@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var Users = require('../models/users');
+var Roles = require('../models/roles');
 
 var bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
@@ -355,33 +356,33 @@ router.post('/auth/login', function (req, res, next) {
                     } else if (isValid) {
                         delete resUser.password;
                         if (resUser.isActive) {
-                            // Companies.findOne({
-                            // _id: resUser.companyID
-                            // }).exec(function (err, resCompany) {
-                            // if (err) {
-                            //     console.log(err);
-                            // }
-                            // if (resCompany) {
-                            //     resUser.company = resCompany;
-                            // } else {
-                            //     resUser.company = {};
-                            // }
-                            jwt.sign({
-                                resUser
-                            }, secretkey, {
-                                expiresIn: tokenExpireTime
-                            }, function (err, token) {
+                            Roles.findOne({
+                                name: resUser.role
+                            }).exec(function (err, resRoles) {
                                 if (err) {
-                                    result.errors.push(err);
-                                    return res.json(result);
-                                } else {
-                                    result.success = true;
-                                    result.result.push(resUser);
-                                    result.token = token;
-                                    return res.json(result);
+                                    console.log(err);
                                 }
-                            })
-                            // });
+                                if (resRoles) {
+                                    result.roles = resRoles;
+                                } else {
+                                    result.roles = {};
+                                }
+                                jwt.sign({
+                                    resUser
+                                }, secretkey, {
+                                    expiresIn: tokenExpireTime
+                                }, function (err, token) {
+                                    if (err) {
+                                        result.errors.push(err);
+                                        return res.json(result);
+                                    } else {
+                                        result.success = true;
+                                        result.result.push(resUser);
+                                        result.token = token;
+                                        return res.json(result);
+                                    }
+                                })
+                            });
                         } else {
                             result.errors.push("Your account has been deactivated, Kindly contact administrator.");
                             return res.json(result);
