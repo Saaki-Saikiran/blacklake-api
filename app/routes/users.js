@@ -16,8 +16,43 @@ var verifyToken = require('../auth/tokenValidator');
 
 const saltRounds = 10;
 
+router.post('/list', verifyToken, function (req, res, next) {
+    var result = {
+        success: false,
+        errors: [],
+        result: []
+    };
+    var errors = [];
+    var data = req.body;
+    console.log(data, '----');
+    var loggedUser = req.loggedUser;
+    if (errors.length) {
+        result.errors = errors;
+        return res.json(result);
+    } else {
+        var query = data.match ? data.match : {};
+        var fields = (data.fields) ? data.fields : {};
+        var pagination = (data.pagination) ? data.pagination : {};
+        var sort = (data.sort) ? data.sort : undefined;
+        Users.find(query, fields, pagination).sort(sort).populate('createdBy', {
+            username: 1
+        }).lean().exec(function (err, resVehicles) {
+            console.log(err);
+            console.log(resVehicles);
+            if (err) {
+                result.errors.push(err.message);
+                return res.json(result);
+            } else {
+                result.result = resVehicles;
+                result.success = true;
+                return res.json(result);
+            }
+        });
+    }
+});
 
 router.post('/create', function (req, res, next) {
+    console.log(req, '--------------');
     var data = req.body;
     var result = {
         success: false,
@@ -50,9 +85,9 @@ router.post('/create', function (req, res, next) {
     if (!data.phone) {
         errors.push("phone is required");
     }
-    if (typeof data.isActive !== "boolean") {
-        errors.push("isActive(boolean type) is required");
-    }
+    // if (typeof data.isActive !== "boolean") {
+    //     errors.push("isActive(boolean type) is required");
+    // }
     // data.createdBy = loggedUser._id;
 
     if (errors.length) {
@@ -92,6 +127,7 @@ router.post('/create', function (req, res, next) {
 
 router.put('/update', verifyToken, function (req, res, next) {
     var data = req.body;
+    console.log('-----------saikiran------------');
     var errors = [];
     var result = {
         success: false,
@@ -105,20 +141,32 @@ router.put('/update', verifyToken, function (req, res, next) {
     }
     updateObj.updatedOn = new Date();
     updateObj.updatedBy = loggedUser._id;
-    if (data.fname) {
-        updateObj.fname = data.fname;
+    if (data.name) {
+        updateObj.name = data.name;
     }
-    if (data.lname) {
-        updateObj.lname = data.lname;
+    if (data.address) {
+        updateObj.name = data.name;
+    }
+    if (data.username) {
+        updateObj.username = data.username;
+    }
+    if (data.email) {
+        updateObj.email = data.email;
+    }
+    if (data.password) {
+        updateObj.password = data.password;
+    }
+    if (data.confirmPassword) {
+        updateObj.confirmPassword = data.confirmPassword;
+    }
+    if (data.role) {
+        updateObj.role = data.role;
     }
     if (data.phone) {
         updateObj.phone = data.phone;
     }
-    if (data.profilepic) {
-        updateObj.profilepic = data.profilepic
-    }
-    if (data.email) {
-        updateObj.email = data.email
+    if (data.isActive) {
+        updateObj.isActive = data.isActive
     }
 
     if (errors.length) {
@@ -203,7 +251,7 @@ router.put('/changePassword', verifyToken, function (req, res, next) {
     var errors = [];
     var data = req.body;
     var loggedUser = req.loggedUser;
-    if (!data.currentPassword) {
+    if (data.currentPassword) {
         errors.push("currentPassword is required");
     }
     if (!data.newPassword) {
@@ -266,95 +314,181 @@ router.put('/changePassword', verifyToken, function (req, res, next) {
 
 
 router.post('/auth/login', function (req, res, next) {
-    if (!req.headers.authorization || req.headers.authorization.indexOf('Basic ') === -1) {
-        return res.status(401).json({
-            "success": false,
-            "result": [],
-            errors: ['Missing Authorization Header']
-        });
+    var result = {
+        success: false,
+        errors: [],
+        result: []
+    }
+    var errors = [];
+    var data = req.body;
+    console.log(data, 'sai======');
+    if (!data.username) {
+        errors.push("Username is required");
+    }
+    if (!data.password) {
+        errors.push("password is required");
+    }
+    if (errors.length) {
+        result.errors = errors;
+        return res.json(result);
     } else {
-        var data = {};
-        const base64Credentials = req.headers.authorization.split(' ')[1];
-        const credentials = Buffer.from(base64Credentials, 'base64').toString('ascii');
-        [data.username, data.password] = credentials.split(':');
-
-        var result = {
-            success: false,
-            errors: [],
-            result: []
-        }
-        var errors = [];
-        if (!data.username) {
-            errors.push("username is required");
-        }
-        if (!data.password) {
-            errors.push("password is required");
-        }
-        console.log(data, '-----------');
-
-        if (errors.length) {
-            result.errors = errors;
-            return res.json(result);
-        } else {
-            Users.findOne({
-                $or: [{
-                    username: data.username
-                }, {
-                    email: data.email
-                }]
-            }).lean().exec(function (err, resUser) {
-                console.log(resUser, '-----------');
-                if (err) {
-                    result.errors.push(err.message);
-                    return res.json(result);
-                } else if (resUser) {
-                    let date = new Date();
-                    let dateDiff = ((date.getTime() - resUser.createdOn.getTime()) / (1000 * 3600 * 24));
-                    console.log('dateDiff---->', dateDiff);
-                    if ((dateDiff / (1000 * 3600 * 24)) <= 30) {
-                        bcrypt.compare(data.password, resUser.password, function (err, isValid) {
-                            if (err) {
-                                result.errors.push(err);
-                                return res.json(result);
-                            } else if (isValid) {
-                                delete resUser.password;
-                                if (resUser.active) {
-                                    jwt.sign({
-                                        resUser
-                                    }, secretkey, {
-                                        expiresIn: tokenExpireTime
-                                    }, function (err, token) {
-                                        if (err) {
-                                            result.errors.push(err);
-                                            return res.json(result);
-                                        } else {
-                                            result.success = true;
-                                            result.result.push(resUser);
-                                            result.token = token;
-                                            return res.json(result);
-                                        }
-                                    })
+        Users.findOne({
+            $or: [{
+                username: data.username
+            }, {
+                email: data.email
+            }]
+        }).lean().exec(function (err, resUser) {
+            console.log(resUser, '====');
+            if (err) {
+                result.errors.push(err.message);
+                return res.json(result);
+            } else if (resUser) {
+                console.log(data.password);
+                console.log(resUser.password);
+                bcrypt.compare(data.password, resUser.password, function (err, isValid) {
+                    console.log(err);
+                    console.log(isValid);
+                    if (err) {
+                        result.errors.push(err);
+                        return res.json(result);
+                    } else if (isValid) {
+                        delete resUser.password;
+                        if (resUser.isActive) {
+                            // Companies.findOne({
+                            // _id: resUser.companyID
+                            // }).exec(function (err, resCompany) {
+                            // if (err) {
+                            //     console.log(err);
+                            // }
+                            // if (resCompany) {
+                            //     resUser.company = resCompany;
+                            // } else {
+                            //     resUser.company = {};
+                            // }
+                            jwt.sign({
+                                resUser
+                            }, secretkey, {
+                                expiresIn: tokenExpireTime
+                            }, function (err, token) {
+                                if (err) {
+                                    result.errors.push(err);
+                                    return res.json(result);
                                 } else {
-                                    result.errors.push("Your account has been deactivated, Kindly contact administrator.");
+                                    result.success = true;
+                                    result.result.push(resUser);
+                                    result.token = token;
                                     return res.json(result);
                                 }
-                            } else {
-                                result.errors.push("Invalid Credentials-------------");
-                                return res.json(result);
-                            }
-                        })
+                            })
+                            // });
+                        } else {
+                            result.errors.push("Your account has been deactivated, Kindly contact administrator.");
+                            return res.json(result);
+                        }
                     } else {
-                        result.errors.push("Exceeded The Trail Period, Kindly contact administrator");
+                        result.errors.push("Invalid Credentials");
                         return res.json(result);
                     }
-                } else {
-                    result.errors.push("Invalid Credentials");
-                    return res.json(result);
-                }
-            })
-        }
+                })
+            } else {
+                result.errors.push("Invalid Credentials");
+                return res.json(result);
+            }
+        })
     }
 });
+
+// router.post('/auth/login', function (req, res, next) {
+//     // if (!req.headers.authorization || req.headers.authorization.indexOf('Basic ') === -1) {
+//     //     return res.status(401).json({
+//     //         "success": false,
+//     //         "result": [],
+//     //         errors: ['Missing Authorization Header']
+//     //     });
+//     // } else {
+//     // var data = {};
+//     // const base64Credentials = req.headers.authorization.split(' ')[1];
+//     // const credentials = Buffer.from(base64Credentials, 'base64').toString('ascii');
+//     // [data.username, data.password] = credentials.split(':');
+
+//     // var result = {
+//     //     success: false,
+//     //     errors: [],
+//     //     result: []
+//     // }
+//     var errors = [];
+//     if (!data.username) {
+//         errors.push("username is required");
+//     }
+//     if (!data.password) {
+//         errors.push("password is required");
+//     }
+//     console.log(data, '-----------');
+
+//     if (errors.length) {
+//         result.errors = errors;
+//         return res.json(result);
+//     } else {
+//         Users.findOne({
+//             $or: [{
+//                 username: data.username
+//             }, {
+//                 email: data.email
+//             }]
+//         }).lean().exec(function (err, resUser) {
+//             console.log(resUser, '-----------');
+//             if (err) {
+//                 result.errors.push(err.message);
+//                 return res.json(result);
+//             } else if (resUser) {
+//                 let date = new Date();
+//                 let dateDiff = ((date.getTime() - resUser.createdOn.getTime()) / (1000 * 3600 * 24));
+//                 console.log('dateDiff---->', dateDiff);
+//                 if ((dateDiff / (1000 * 3600 * 24)) <= 30) {
+//                     bcrypt.compare(data.password, resUser.password, function (err, isValid) {
+//                         if (err) {
+//                             result.errors.push(err);
+//                             return res.json(result);
+//                         } else if (isValid) {
+//                             delete resUser.password;
+//                             if (resUser.active) {
+//                                 jwt.sign({
+//                                     resUser
+//                                 }, secretkey, {
+//                                     expiresIn: tokenExpireTime
+//                                 }, function (err, token) {
+//                                     if (err) {
+//                                         result.errors.push(err);
+//                                         return res.json(result);
+//                                     } else {
+//                                         result.success = true;
+//                                         result.result.push(resUser);
+//                                         result.token = token;
+//                                         return res.json(result);
+//                                     }
+//                                 })
+//                             } else {
+//                                 result.errors.push("Your account has been deactivated, Kindly contact administrator.");
+//                                 return res.json(result);
+//                             }
+//                         } else {
+//                             result.errors.push("Invalid Credentials-------------");
+//                             return res.json(result);
+//                         }
+//                     })
+//                 } else {
+//                     result.errors.push("Exceeded The Trail Period, Kindly contact administrator");
+//                     return res.json(result);
+//                 }
+//             } else {
+//                 result.errors.push("Invalid Credentials");
+//                 return res.json(result);
+//             }
+//         })
+//         // }
+//     }
+// });
 
 
 module.exports = router;

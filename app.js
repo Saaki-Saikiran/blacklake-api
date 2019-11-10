@@ -43,30 +43,30 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 //allows below headers
-// app.use(function (req, res, next) {
-//   var value = '*';
+app.use(function (req, res, next) {
+  var value = '*';
 
-//   if (req.headers.origin) {
-//CORS error
-//     value = req.headers.origin;
-//   }
+  if (req.headers.origin) {
+    //CORS error
+    value = req.headers.origin;
+  }
 
-//   // Website you wish to allow to connect
-//   res.setHeader('Access-Control-Allow-Origin', value);
+  // Website you wish to allow to connect
+  res.setHeader('Access-Control-Allow-Origin', value);
 
-//   // Request methods you wish to allow
-//   res.setHeader('Access-Control-Allow-Methods', 'GET, POST,  PUT, PATCH, DELETE');
+  // Request methods you wish to allow
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST,  PUT, PATCH, DELETE');
 
-//   // Request headers you wish to allow
-//   res.setHeader('Access-Control-Allow-Headers', 'Authorization, Origin, X-Requested-With,content-type,Accept');
+  // Request headers you wish to allow
+  res.setHeader('Access-Control-Allow-Headers', 'Authorization, Origin, X-Requested-With,content-type,Accept');
 
-//   // Set to true if you need the website to include cookies in the requests sent
-//   // to the API (e.g. in case you use sessions)
-//   res.setHeader('Access-Control-Allow-Credentials', true);
+  // Set to true if you need the website to include cookies in the requests sent
+  // to the API (e.g. in case you use sessions)
+  res.setHeader('Access-Control-Allow-Credentials', true);
 
-//   // Pass to next layer of middleware
-//   next();
-// });
+  // Pass to next layer of middleware
+  next();
+});
 
 //including our routes
 var usersRouter = require('./app/routes/users');
@@ -78,6 +78,8 @@ var tenantsRouter = require('./app/routes/tenants');
 var floorsRouter = require('./app/routes/floors');
 var dgsRouter = require('./app/routes/dgs');
 
+var rolesRouter = require('./app/routes/roles');
+
 // app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/metertypes', metertypesRouter);
@@ -87,6 +89,8 @@ app.use('/meters', metersRouter);
 app.use('/tenants', tenantsRouter);
 app.use('/floors', floorsRouter);
 app.use('/dgs', dgsRouter);
+
+app.use('/roles', rolesRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

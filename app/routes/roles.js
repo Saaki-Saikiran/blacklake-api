@@ -12,6 +12,7 @@ router.post('/list', verifyToken, function (req, res, next) {
     };
     var errors = [];
     var data = req.body;
+    console.log(data, '----');
     var loggedUser = req.loggedUser;
     if (errors.length) {
         result.errors = errors;
@@ -20,12 +21,17 @@ router.post('/list', verifyToken, function (req, res, next) {
         var query = data.match ? data.match : {};
         var fields = (data.fields) ? data.fields : {};
         var pagination = (data.pagination) ? data.pagination : {};
-        Roles.find(query, fields, pagination, function (err, resRoles) {
+        var sort = (data.sort) ? data.sort : undefined;
+        Roles.find(query, fields, pagination).sort(sort).populate('createdBy', {
+            username: 1
+        }).lean().exec(function (err, resVehicles) {
+            console.log(err);
+            console.log(resVehicles);
             if (err) {
                 result.errors.push(err.message);
                 return res.json(result);
             } else {
-                result.result = resRoles;
+                result.result = resVehicles;
                 result.success = true;
                 return res.json(result);
             }
@@ -35,8 +41,10 @@ router.post('/list', verifyToken, function (req, res, next) {
 
 
 
+
 router.post('/create', verifyToken, function (req, res, next) {
     var data = req.body;
+    console.log(data, '---sai===');
     var result = {
         success: false,
         result: [],
@@ -47,9 +55,9 @@ router.post('/create', verifyToken, function (req, res, next) {
     if (!data.name) {
         errors.push("name is required");
     }
-    // if (!data.code) {
-    //     errors.push("code is required");
-    // }
+    if (typeof data.isActive !== "boolean") {
+        errors.push("isActive(boolean type) is required");
+    }
     data.createdBy = loggedUser._id;
     data.createdOn = new Date();
     if (errors.length) {
@@ -92,8 +100,11 @@ router.put('/update', verifyToken, function (req, res, next) {
     // if (data.desc) {
     //     updateObj.desc = data.desc;
     // }
-    if (data.permissions) {
+    if (data.menus) {
         updateObj.menus = data.menus
+    }
+    if (data.isActive) {
+        updateObj.isActive = data.isActive
     }
     if (errors.length) {
         result.errors = errors;
