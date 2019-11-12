@@ -53,7 +53,7 @@ router.post('/list', verifyToken, function (req, res, next) {
 });
 
 router.post('/create', function (req, res, next) {
-    console.log(req, '--------------');
+    // console.log(req, '--------------');
     var data = req.body;
     var result = {
         success: false,
@@ -368,20 +368,22 @@ router.post('/auth/login', function (req, res, next) {
                                     result.roles = {};
                                 }
                                 jwt.sign({
-                                    resUser
-                                }, secretkey, {
-                                    expiresIn: tokenExpireTime
-                                }, function (err, token) {
-                                    if (err) {
-                                        result.errors.push(err);
-                                        return res.json(result);
-                                    } else {
-                                        result.success = true;
-                                        result.result.push(resUser);
-                                        result.token = token;
-                                        return res.json(result);
-                                    }
-                                })
+                                        resUser
+                                    },
+                                    secretkey, {
+                                        expiresIn: tokenExpireTime
+                                    },
+                                    function (err, token) {
+                                        if (err) {
+                                            result.errors.push(err);
+                                            return res.json(result);
+                                        } else {
+                                            result.success = true;
+                                            result.result.push(resUser);
+                                            result.token = token;
+                                            return res.json(result);
+                                        }
+                                    })
                             });
                         } else {
                             result.errors.push("Your account has been deactivated, Kindly contact administrator.");

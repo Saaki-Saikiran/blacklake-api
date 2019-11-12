@@ -1,20 +1,17 @@
 {
-    "dbConfig":
-    {
-        "host": "52.66.142.111",
+    "dbConfig": {
+        "host": "13.234.144.50",
         "port": 27017,
-        "dbName": "yard_db",
-        "username":"yarduser",
-        "password":"Zip1AtHluVo"
+        "dbName": "blacklake",
+        "username": "blacklake_user",
+        "password": "3wV3Ef765eK6AJts"
     },
-    "secretkey": "itsyourwish@yard",
+    "secretkey": "itsyourwish@blacklake",
     "tokenExpireTime": "8h",
-    "mail":
-    {
+    "mail": {
         "service": "gmail",
-        "auth":
-        {
-            "user": "info.trakitnow@gmail.com",
+        "auth": {
+            "user": "info@gmail.com",
             "pass": "Welcome#324"
         }
     }

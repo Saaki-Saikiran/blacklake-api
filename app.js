@@ -11,9 +11,11 @@ var db = require('./config/db');
 mongoose.set('debug', true);
 
 mongoose.connect(db.url, {
-  useNewUrlParser: true
+  useNewUrlParser: true,
+  useUnifiedTopology: true
 });
-// mongoose.set('useCreateIndex', true);
+
+mongoose.set('useCreateIndex', true);
 
 //db connection ends
 
