@@ -9,16 +9,19 @@ var meterTypes = mongoose.Schema({
     },
     type: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
-    isBillable: {
-        type: Boolean,
-        default: true
-    },
-    isCommon: {
-        type: Boolean,
-        default: true
-    },
+    attribute: [{
+        isBillable: {
+            type: Boolean,
+            default: false
+        },
+        isCommon: {
+            type: Boolean,
+            default: false
+        }
+    }],
     description: {
         type: String,
         required: true
@@ -51,7 +54,5 @@ var meterTypes = mongoose.Schema({
 }, {
     strict: true
 });
-
-// yards.index({ name: 1 }, { unique: true });
 
 module.exports = mongoose.model("metertypes", meterTypes);

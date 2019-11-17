@@ -44,14 +44,17 @@ router.post('/create', verifyToken, function (req, res, next) {
     }
     var errors = [];
     var loggedUser = req.loggedUser;
-    if (!data.type) {
-        errors.push("type is required");
+    if (!data.dgSerialNumber) {
+        errors.push("dgSerialNumber is required");
     }
-    if (typeof data.isCommon !== "boolean") {
-        errors.push("isCommon(boolean type) is required");
+    if (!data.model) {
+        errors.push("model is required");
     }
-    if (typeof data.isBillable !== "boolean") {
-        errors.push("isBillable(boolean type) is required");
+    if (!data.meterSerialNumber) {
+        errors.push("meterSerialNumber is required");
+    }
+    if (!data.yearMake) {
+        errors.push("yearMake is required");
     }
     if (!data.description) {
         errors.push("description is required");
@@ -90,24 +93,22 @@ router.put('/update', verifyToken, function (req, res, next) {
     if (!data._id) {
         errors.push("_id is required");
     }
-    if (data.type) {
-        updateObj.type = data.type;
+    if (data.dgSerialNumber) {
+        updateObj.dgSerialNumber = data.dgSerialNumber;
     }
-    if (typeof data.isCommon === "boolean") {
-        updateObj.isCommon = data.isCommon;
-    } else {
-        errors.push("isCommon(boolean type) is required");
+    if (data.model) {
+        updateObj.model = data.model;
     }
-
-    if (typeof data.isBillable === "boolean") {
-        updateObj.isBillable = data.isBillable;
-    } else {
-        errors.push("isBillable(boolean type) is required");
+    if (data.meterSerialNumber) {
+        updateObj.meterSerialNumber = data.meterSerialNumber;
     }
-
+    if (data.yearMake) {
+        updateObj.yearMake = data.yearMake;
+    }
     if (data.description) {
         updateObj.description = data.description;
     }
+
     if (errors.length) {
         result.errors = errors;
         return res.json(result);
@@ -124,7 +125,7 @@ router.put('/update', verifyToken, function (req, res, next) {
                 return res.json(result);
             } else if (upMeter.nModified) {
                 result.success = true;
-                result.result.push("Meter type updated successfully");
+                result.result.push("DG updated successfully");
                 return res.json(result);
             } else {
                 result.errors.push("No record found with this _id");
@@ -161,7 +162,7 @@ router.delete('/:id', verifyToken, function (req, res) {
             return res.json(result);
         } else if (upMeter.nModified) {
             result.success = true;
-            result.result.push("Meter Type deleted successfully");
+            result.result.push("DG deleted successfully");
             return res.json(result);
         } else {
             result.errors.push("No record found with this id");

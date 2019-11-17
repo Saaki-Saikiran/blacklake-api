@@ -21,15 +21,9 @@ var floors = mongoose.Schema({
     },
     occupantNumber: {
         type: Number,
-        default: true
     },
     sqFts: {
         type: Number,
-        default: true
-    },
-    isActive: {
-        type: Boolean,
-        default: true
     },
     active: {
         type: Boolean,

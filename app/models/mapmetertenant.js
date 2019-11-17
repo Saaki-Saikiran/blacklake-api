@@ -2,25 +2,45 @@ var mongoose = require('mongoose');
 var shortid = require('shortid');
 shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@');
 
-var deptMeters = mongoose.Schema({
+var meterTenants = mongoose.Schema({
     _id: {
         type: String,
         default: shortid.generate
     },
     deptMeterNumber: {
         type: Number,
+    },
+    meterSerialNumber: {
+        type: String,
+        required: true,
+        // unique: true
+    },
+    meterType: {
+        type: String,
+        required: true
+    },
+    gatewayName: {
+        type: String,
+        required: true
+    },
+    block: {
+        type: String,
+        required: true
+    },
+    floor: {
+        type: String,
+        required: true
+    },
+    tenantName: {
+        type: String,
         required: true,
         unique: true
     },
-    location: {
+    contactNumber: {
         type: String,
-        required: true
+        // required: true
     },
-    provider: {
-        type: String,
-        required: true
-    },
-    description: {
+    started: {
         type: String,
         required: true
     },
@@ -44,8 +64,7 @@ var deptMeters = mongoose.Schema({
         type: Date
     },
     removedBy: {
-        type: String,
-        ref: "users"
+        type: String
     },
     removedOn: {
         type: Date
@@ -54,4 +73,4 @@ var deptMeters = mongoose.Schema({
     strict: true
 });
 
-module.exports = mongoose.model("deptMeters", deptMeters);
+module.exports = mongoose.model("meterTenants", meterTenants);

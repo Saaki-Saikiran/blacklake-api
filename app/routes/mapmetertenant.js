@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var Tenants = require('../models/tenants');
+var meterTenants = require('../models/mapmetertenants');
 var verifyToken = require('../auth/tokenValidator');
 
 router.post('/list', verifyToken, function (req, res, next) {
@@ -20,7 +20,7 @@ router.post('/list', verifyToken, function (req, res, next) {
         var fields = (data.fields) ? data.fields : {};
         var pagination = (data.pagination) ? data.pagination : {};
         var sort = (data.sort) ? data.sort : undefined;
-        Tenants.find(query, fields, pagination).sort(sort).populate('createdBy', {
+        meterTenants.find(query, fields, pagination).sort(sort).populate('createdBy', {
             username: 1
         }).lean().exec(function (err, resVehicles) {
             if (err) {
@@ -44,20 +44,32 @@ router.post('/create', verifyToken, function (req, res, next) {
     }
     var errors = [];
     var loggedUser = req.loggedUser;
+    if (!data.deptMeterNumber) {
+        errors.push("dept Meter Number is required");
+    }
+    if (!data.meterSerialNumber) {
+        errors.push("meterSerialNumber is required");
+    }
+    if (!data.meterType) {
+        errors.push("meterType is required");
+    }
+    if (!data.gatewayName) {
+        errors.push("gatewayName is required");
+    }
+    if (!data.block) {
+        errors.push("block is required");
+    }
+    if (!data.floor) {
+        errors.push("floor is required");
+    }
     if (!data.tenantName) {
         errors.push("tenantName is required");
-    }
-    if (!data.contactPersonName) {
-        errors.push("contactPersonName is required");
     }
     if (!data.contactNumber) {
         errors.push("contactNumber is required");
     }
-    if (!data.email) {
-        errors.push("email is required");
-    }
-    if (!data.comments) {
-        errors.push("comments is required");
+    if (!data.started) {
+        errors.push("started is required");
     }
 
     data.createdBy = loggedUser._id;
@@ -66,8 +78,8 @@ router.post('/create', verifyToken, function (req, res, next) {
         result.errors = errors;
         return res.json(result);
     } else {
-        var tenants = new Tenants(data);
-        tenants.save(function (err, resMeter) {
+        var metertenants = new meterTenants(data);
+        metertenants.save(function (err, resMeter) {
             if (err) {
                 result.errors.push(err.message);
                 return res.json(result);
@@ -93,22 +105,32 @@ router.put('/update', verifyToken, function (req, res, next) {
     if (!data._id) {
         errors.push("_id is required");
     }
+    if (data.deptMeterNumber) {
+        updateObj.deptMeterNumber = data.deptMeterNumber;
+    }
+    if (data.meterSerialNumber) {
+        updateObj.meterSerialNumber = data.meterSerialNumber;
+    }
+    if (data.meterType) {
+        updateObj.meterType = data.meterType;
+    }
+    if (data.gatewayName) {
+        updateObj.gatewayName = data.gatewayName;
+    }
+    if (data.block) {
+        updateObj.block = data.block;
+    }
+    if (data.floor) {
+        updateObj.floor = data.floor;
+    }
     if (data.tenantName) {
         updateObj.tenantName = data.tenantName;
-    }
-
-    if (data.contactPersonName) {
-        updateObj.contactPersonName = data.contactPersonName;
     }
     if (data.contactNumber) {
         updateObj.contactNumber = data.contactNumber;
     }
-
-    if (data.email) {
-        updateObj.email = data.email;
-    }
-    if (data.comments) {
-        updateObj.comments = data.comments;
+    if (data.started) {
+        updateObj.started = data.started;
     }
     if (errors.length) {
         result.errors = errors;
@@ -116,7 +138,7 @@ router.put('/update', verifyToken, function (req, res, next) {
     } else {
         updateObj.updatedBy = loggedUser._id;
         updateObj.updatedOn = new Date();
-        Tenants.updateOne({
+        meterTenants.updateOne({
             _id: data._id
         }, {
             $set: updateObj
@@ -126,7 +148,7 @@ router.put('/update', verifyToken, function (req, res, next) {
                 return res.json(result);
             } else if (upMeter.nModified) {
                 result.success = true;
-                result.result.push("Tenants updated successfully");
+                result.result.push("meterTenants updated successfully");
                 return res.json(result);
             } else {
                 result.errors.push("No record found with this _id");
@@ -147,13 +169,13 @@ router.delete('/:id', verifyToken, function (req, res) {
     var loggedUser = req.loggedUser;
     var updateObj = {};
     // if (loggedUser.role != "admin") {
-    //     result.errors.push("You are not authorized to delete Tenants");
+    //     result.errors.push("You are not authorized to delete meterTenants");
     //     return res.json(result);
     // } else {
     updateObj.removedBy = loggedUser._id;
     updateObj.removedOn = new Date();
     updateObj.active = false;
-    Tenants.updateOne({
+    meterTenants.updateOne({
         _id: id
     }, {
         $set: updateObj
@@ -163,7 +185,7 @@ router.delete('/:id', verifyToken, function (req, res) {
             return res.json(result);
         } else if (upMeter.nModified) {
             result.success = true;
-            result.result.push("Tenants deleted successfully");
+            result.result.push("meterTenants deleted successfully");
             return res.json(result);
         } else {
             result.errors.push("No record found with this id");

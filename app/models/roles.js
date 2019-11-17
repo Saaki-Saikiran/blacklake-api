@@ -16,8 +16,6 @@ var roles = mongoose.Schema({
         type: Boolean,
         required: true
     },
-    // code: { type: String, required: true, unique: true },
-    // desc: { type: String },
     menus: {
         options: [{
             slug: {

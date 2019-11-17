@@ -44,17 +44,20 @@ router.post('/create', verifyToken, function (req, res, next) {
     }
     var errors = [];
     var loggedUser = req.loggedUser;
-    if (!data.type) {
-        errors.push("type is required");
+    if (!data.building) {
+        errors.push("building is required");
     }
-    if (typeof data.isCommon !== "boolean") {
-        errors.push("isCommon(boolean type) is required");
+    if (!data.block) {
+        errors.push("block is required");
     }
-    if (typeof data.isBillable !== "boolean") {
-        errors.push("isBillable(boolean type) is required");
+    if (!data.floor) {
+        errors.push("floor is required");
     }
-    if (!data.description) {
-        errors.push("description is required");
+    if (!data.occupantNumber) {
+        errors.push("occupantNumber is required");
+    }
+    if (!data.sqFts) {
+        errors.push("sqFts is required");
     }
 
     data.createdBy = loggedUser._id;
@@ -90,23 +93,20 @@ router.put('/update', verifyToken, function (req, res, next) {
     if (!data._id) {
         errors.push("_id is required");
     }
-    if (data.type) {
-        updateObj.type = data.type;
+    if (data.building) {
+        updateObj.building = data.building;
     }
-    if (typeof data.isCommon === "boolean") {
-        updateObj.isCommon = data.isCommon;
-    } else {
-        errors.push("isCommon(boolean type) is required");
+    if (data.block) {
+        updateObj.block = data.block;
     }
-
-    if (typeof data.isBillable === "boolean") {
-        updateObj.isBillable = data.isBillable;
-    } else {
-        errors.push("isBillable(boolean type) is required");
+    if (data.floor) {
+        updateObj.floor = data.floor;
     }
-
-    if (data.description) {
-        updateObj.description = data.description;
+    if (data.occupantNumber) {
+        updateObj.occupantNumber = data.occupantNumber;
+    }
+    if (data.sqFts) {
+        updateObj.sqFts = data.sqFts;
     }
     if (errors.length) {
         result.errors = errors;
@@ -124,7 +124,7 @@ router.put('/update', verifyToken, function (req, res, next) {
                 return res.json(result);
             } else if (upMeter.nModified) {
                 result.success = true;
-                result.result.push("Meter type updated successfully");
+                result.result.push("Floor updated successfully");
                 return res.json(result);
             } else {
                 result.errors.push("No record found with this _id");
@@ -161,7 +161,7 @@ router.delete('/:id', verifyToken, function (req, res) {
             return res.json(result);
         } else if (upMeter.nModified) {
             result.success = true;
-            result.result.push("Meter Type deleted successfully");
+            result.result.push("Floor deleted successfully");
             return res.json(result);
         } else {
             result.errors.push("No record found with this id");

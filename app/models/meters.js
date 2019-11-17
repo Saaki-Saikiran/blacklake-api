@@ -9,7 +9,8 @@ var meters = mongoose.Schema({
     },
     meterSerialNumber: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     model: {
         type: String,
@@ -29,19 +30,19 @@ var meters = mongoose.Schema({
     },
     panel: {
         type: String,
-        required: true
+        // required: true
     },
     gateway: {
         type: String,
         required: true
     },
+    provider: {
+        type: String,
+        // required: true
+    },
     multifyingFactor: {
         type: Number,
         required: true
-    },
-    isActive: {
-        type: Boolean,
-        default: true
     },
     comments: {
         type: String,

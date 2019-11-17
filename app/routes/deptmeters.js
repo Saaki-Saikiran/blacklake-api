@@ -44,19 +44,18 @@ router.post('/create', verifyToken, function (req, res, next) {
     }
     var errors = [];
     var loggedUser = req.loggedUser;
-    if (!data.type) {
-        errors.push("type is required");
+    if (!data.deptMeterNumber) {
+        errors.push("dept Meter Number is required");
     }
-    if (typeof data.isCommon !== "boolean") {
-        errors.push("isCommon(boolean type) is required");
+    if (!data.location) {
+        errors.push("location is required");
     }
-    if (typeof data.isBillable !== "boolean") {
-        errors.push("isBillable(boolean type) is required");
+    if (!data.provider) {
+        errors.push("provider is required");
     }
     if (!data.description) {
         errors.push("description is required");
     }
-
     data.createdBy = loggedUser._id;
     data.createdOn = new Date();
     if (errors.length) {
@@ -90,21 +89,15 @@ router.put('/update', verifyToken, function (req, res, next) {
     if (!data._id) {
         errors.push("_id is required");
     }
-    if (data.type) {
-        updateObj.type = data.type;
+    if (data.deptMeterNumber) {
+        updateObj.deptMeterNumber = data.deptMeterNumber;
     }
-    if (typeof data.isCommon === "boolean") {
-        updateObj.isCommon = data.isCommon;
-    } else {
-        errors.push("isCommon(boolean type) is required");
+    if (data.location) {
+        updateObj.location = data.location;
     }
-
-    if (typeof data.isBillable === "boolean") {
-        updateObj.isBillable = data.isBillable;
-    } else {
-        errors.push("isBillable(boolean type) is required");
+    if (data.provider) {
+        updateObj.provider = data.provider;
     }
-
     if (data.description) {
         updateObj.description = data.description;
     }
@@ -161,7 +154,7 @@ router.delete('/:id', verifyToken, function (req, res) {
             return res.json(result);
         } else if (upMeter.nModified) {
             result.success = true;
-            result.result.push("Meter Type deleted successfully");
+            result.result.push("Deptmeters deleted successfully");
             return res.json(result);
         } else {
             result.errors.push("No record found with this id");

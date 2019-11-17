@@ -47,12 +47,15 @@ router.post('/create', verifyToken, function (req, res, next) {
     if (!data.type) {
         errors.push("type is required");
     }
-    if (typeof data.isCommon !== "boolean") {
-        errors.push("isCommon(boolean type) is required");
+    if (!data.attribute) {
+        errors.push("attribute is required");
     }
-    if (typeof data.isBillable !== "boolean") {
-        errors.push("isBillable(boolean type) is required");
-    }
+    // if (typeof data.isCommon !== "boolean") {
+    //     errors.push("isCommon(boolean type) is required");
+    // }
+    // if (typeof data.isBillable !== "boolean") {
+    //     errors.push("isBillable(boolean type) is required");
+    // }
     if (!data.description) {
         errors.push("description is required");
     }
@@ -93,20 +96,23 @@ router.put('/update', verifyToken, function (req, res, next) {
     if (data.type) {
         updateObj.type = data.type;
     }
-    if (typeof data.isCommon === "boolean") {
-        updateObj.isCommon = data.isCommon;
-    } else {
-        errors.push("isCommon(boolean type) is required");
-    }
+    // if (typeof data.isCommon === "boolean") {
+    //     updateObj.isCommon = data.isCommon;
+    // } else {
+    //     errors.push("isCommon(boolean type) is required");
+    // }
 
-    if (typeof data.isBillable === "boolean") {
-        updateObj.isBillable = data.isBillable;
-    } else {
-        errors.push("isBillable(boolean type) is required");
-    }
+    // if (typeof data.isBillable === "boolean") {
+    //     updateObj.isBillable = data.isBillable;
+    // } else {
+    //     errors.push("isBillable(boolean type) is required");
+    // }
 
     if (data.description) {
         updateObj.description = data.description;
+    }
+    if (data.attribute) {
+        updateObj.attribute = data.attribute;
     }
     if (errors.length) {
         result.errors = errors;

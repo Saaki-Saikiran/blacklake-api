@@ -9,7 +9,8 @@ var DGs = mongoose.Schema({
     },
     dgSerialNumber: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     model: {
         type: String,
@@ -17,15 +18,14 @@ var DGs = mongoose.Schema({
     },
     meterSerialNumber: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     yearMake: {
         type: Number,
-        required: true
     },
     description: {
         type: String,
-        required: true
     },
     active: {
         type: Boolean,

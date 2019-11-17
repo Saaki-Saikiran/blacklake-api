@@ -7,21 +7,23 @@ var tenants = mongoose.Schema({
         type: String,
         default: shortid.generate
     },
-    name: {
+    tenantName: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     contactPersonName: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     contactNumber: {
         type: String,
-        required: true
+        // required: true
     },
     email: {
         type: String,
-        required: true,
+        // required: true,
         lowercase: true,
         validate: {
             validator: function (v) {
@@ -29,14 +31,6 @@ var tenants = mongoose.Schema({
             },
             message: props => props.value + ' is not a valid email!'
         }
-    },
-    isActive: {
-        type: Boolean,
-        default: true
-    },
-    isTenant: {
-        type: Boolean,
-        default: true
     },
     comments: {
         type: String,

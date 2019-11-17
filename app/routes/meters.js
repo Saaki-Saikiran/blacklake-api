@@ -44,17 +44,35 @@ router.post('/create', verifyToken, function (req, res, next) {
     }
     var errors = [];
     var loggedUser = req.loggedUser;
-    if (!data.type) {
-        errors.push("type is required");
+    if (!data.meterSerialNumber) {
+        errors.push("meterSerialNumber is required");
     }
-    if (typeof data.isCommon !== "boolean") {
-        errors.push("isCommon(boolean type) is required");
+    if (!data.model) {
+        errors.push("model is required");
     }
-    if (typeof data.isBillable !== "boolean") {
-        errors.push("isBillable(boolean type) is required");
+    if (!data.meterType) {
+        errors.push("meterType is required");
     }
-    if (!data.description) {
-        errors.push("description is required");
+    if (!data.deptMeterNumber) {
+        errors.push("deptMeterNumber is required");
+    }
+    if (!data.sourceType) {
+        errors.push("sourceType is required");
+    }
+    if (!data.panel) {
+        errors.push("panel is required");
+    }
+    if (!data.gateway) {
+        errors.push("gateway is required");
+    }
+    if (!data.provider) {
+        errors.push("provider is required");
+    }
+    if (!data.multifyingFactor) {
+        errors.push("multifyingFactor is required");
+    }
+    if (!data.comments) {
+        errors.push("comments is required");
     }
 
     data.createdBy = loggedUser._id;
@@ -90,23 +108,35 @@ router.put('/update', verifyToken, function (req, res, next) {
     if (!data._id) {
         errors.push("_id is required");
     }
-    if (data.type) {
-        updateObj.type = data.type;
+    if (data.meterSerialNumber) {
+        updateObj.meterSerialNumber = data.meterSerialNumber;
     }
-    if (typeof data.isCommon === "boolean") {
-        updateObj.isCommon = data.isCommon;
-    } else {
-        errors.push("isCommon(boolean type) is required");
+    if (data.model) {
+        updateObj.model = data.model;
     }
-
-    if (typeof data.isBillable === "boolean") {
-        updateObj.isBillable = data.isBillable;
-    } else {
-        errors.push("isBillable(boolean type) is required");
+    if (data.meterType) {
+        updateObj.meterType = data.meterType;
     }
-
-    if (data.description) {
-        updateObj.description = data.description;
+    if (data.deptMeterNumber) {
+        updateObj.deptMeterNumber = data.deptMeterNumber;
+    }
+    if (data.sourceType) {
+        updateObj.sourceType = data.sourceType;
+    }
+    if (data.panel) {
+        updateObj.panel = data.panel;
+    }
+    if (data.gateway) {
+        updateObj.gateway = data.gateway;
+    }
+    if (data.provider) {
+        updateObj.provider = data.provider;
+    }
+    if (data.multifyingFactor) {
+        updateObj.multifyingFactor = data.multifyingFactor;
+    }
+    if (data.comments) {
+        updateObj.comments = data.comments;
     }
     if (errors.length) {
         result.errors = errors;
@@ -124,7 +154,7 @@ router.put('/update', verifyToken, function (req, res, next) {
                 return res.json(result);
             } else if (upMeter.nModified) {
                 result.success = true;
-                result.result.push("Meter type updated successfully");
+                result.result.push("Meter updated successfully");
                 return res.json(result);
             } else {
                 result.errors.push("No record found with this _id");
@@ -161,7 +191,7 @@ router.delete('/:id', verifyToken, function (req, res) {
             return res.json(result);
         } else if (upMeter.nModified) {
             result.success = true;
-            result.result.push("Meter Type deleted successfully");
+            result.result.push("Meter deleted successfully");
             return res.json(result);
         } else {
             result.errors.push("No record found with this id");

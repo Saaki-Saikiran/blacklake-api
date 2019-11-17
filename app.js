@@ -71,27 +71,33 @@ app.use(function (req, res, next) {
 });
 
 //including our routes
+
+//ADMIN MODULE
 var usersRouter = require('./app/routes/users');
 var metertypesRouter = require('./app/routes/metertypes');
-
+//METER MANAGEMENT MODULE
 var deptmetersRouter = require('./app/routes/deptmeters');
 var metersRouter = require('./app/routes/meters');
 var tenantsRouter = require('./app/routes/tenants');
 var floorsRouter = require('./app/routes/floors');
 var dgsRouter = require('./app/routes/dgs');
-
+var mapmetertenantRouter = require('./app/routes/mapmetertenant');
+//USER MANAGEMENT MODULE
 var rolesRouter = require('./app/routes/roles');
 
 // app.use('/', indexRouter);
+
+//ADMIN MODULE
 app.use('/users', usersRouter);
 app.use('/metertypes', metertypesRouter);
-
+//METER MANAGEMENT MODULE
 app.use('/deptmeters', deptmetersRouter);
 app.use('/meters', metersRouter);
 app.use('/tenants', tenantsRouter);
 app.use('/floors', floorsRouter);
 app.use('/dgs', dgsRouter);
-
+app.use('/mapmetertenant', mapmetertenantRouter);
+//USER MANAGEMENT MODULE
 app.use('/roles', rolesRouter);
 
 // catch 404 and forward to error handler
