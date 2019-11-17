@@ -14,6 +14,7 @@ var users = mongoose.Schema({
     email: {
         type: String,
         required: true,
+        unique: true,
         lowercase: true,
         validate: {
             validator: function (v) {
@@ -23,7 +24,9 @@ var users = mongoose.Schema({
         }
     },
     phone: {
-        type: String
+        type: String,
+        required: true,
+        unique: true,
     },
     password: {
         type: String,

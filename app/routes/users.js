@@ -154,12 +154,12 @@ router.put('/update', verifyToken, function (req, res, next) {
     if (data.email) {
         updateObj.email = data.email;
     }
-    if (data.password) {
-        updateObj.password = data.password;
-    }
-    if (data.confirmPassword) {
-        updateObj.confirmPassword = data.confirmPassword;
-    }
+    // if (data.password) {
+    //     updateObj.password = data.password;
+    // }
+    // if (data.confirmPassword) {
+    //     updateObj.confirmPassword = data.confirmPassword;
+    // }
     if (data.role) {
         updateObj.role = data.role;
     }
