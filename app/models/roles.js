@@ -12,6 +12,9 @@ var roles = mongoose.Schema({
         required: true,
         unique: true
     },
+    roleCode: {
+        type: String,
+    },
     isActive: {
         type: Boolean,
         required: true
@@ -49,7 +52,7 @@ var roles = mongoose.Schema({
         type: Date
     },
 }, {
-    strict: true
+    strict: false
 });
 
 module.exports = mongoose.model("roles", roles);

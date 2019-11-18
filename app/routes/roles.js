@@ -67,17 +67,45 @@ router.post('/create', verifyToken, function (req, res, next) {
         // 	result.errors.push("You are not authorized to create new role");
         // 	return res.json(result);
     } else {
+        // roleInfo.save(function (err, resRole) {
+        //     if (err) {
+        //         result.errors.push(err.message);
+        //         return res.json(result);
+        //     } else {
+        //         result.result.push(resRole);
+        //         result.success = true;
+        //         return res.json(result);
+        //     }
+        // });
+
+        var name1 = data.name;
+        reqDataSlug = name1.split(' ').join('_');
+        roleCode = reqDataSlug.toLowerCase();
         var roleInfo = new Roles(data);
-        roleInfo.save(function (err, resRole) {
-            if (err) {
-                result.errors.push(err.message);
-                return res.json(result);
-            } else {
-                result.result.push(resRole);
-                result.success = true;
-                return res.json(result);
-            }
-        });
+        roleInfo.find({
+                roleCode: data.roleCode
+            },
+            function (err, data) {
+                if (err) {
+                    result.errors.push(err.message);
+                    return res.json(result);
+                }
+                if (data.length > 0) {
+                    result.errors.push(err.message + 'Role already exists.');
+                    return res.json(result);
+                }
+                roleInfo.save(function (err, resRole) {
+                    if (err) {
+                        result.errors.push(err.message);
+                        return res.json(result);
+                    } else {
+                        result.result.push(resRole);
+                        result.success = true;
+                        return res.json(result);
+                    }
+                });
+            });
+
     }
 });
 
