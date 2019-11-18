@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var meterTenants = require('../models/mapmetertenants');
+var meterTenants = require('../models/mapmetertenant');
 var verifyToken = require('../auth/tokenValidator');
 
 router.post('/list', verifyToken, function (req, res, next) {

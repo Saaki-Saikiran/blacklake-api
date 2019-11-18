@@ -195,6 +195,47 @@ router.put('/update', verifyToken, function (req, res, next) {
 
 });
 
+
+router.delete('/:id', verifyToken, function (req, res) {
+    var result = {
+        success: false,
+        result: [],
+        errors: []
+    }
+    var errors = [];
+    var loggedUser = req.loggedUser;
+    var data = req.body;
+    var updateObj = {};
+    if (!data._id) {
+        errors.push("_id is required");
+    }
+    // if (loggedUser.role != "admin") {
+    //     result.errors.push("You are not authorized to delete Meter Type");
+    //     return res.json(result);
+    // } else {
+    updateObj.removedBy = loggedUser._id;
+    updateObj.removedOn = new Date();
+    updateObj.active = false;
+    Users.updateOne({
+        _id: id
+    }, {
+        $set: updateObj
+    }, function (err, upMeter) {
+        if (err) {
+            result.errors.push(err.message);
+            return res.json(result);
+        } else if (upMeter.nModified) {
+            result.success = true;
+            result.result.push("Users deleted successfully");
+            return res.json(result);
+        } else {
+            result.errors.push("No record found with this id");
+            return res.json(result);
+        }
+    });
+    // }
+});
+
 router.put('/updateProfile', verifyToken, function (req, res, next) {
     var data = req.body;
     var errors = [];

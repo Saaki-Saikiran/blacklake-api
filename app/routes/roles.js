@@ -39,9 +39,6 @@ router.post('/list', verifyToken, function (req, res, next) {
     }
 });
 
-
-
-
 router.post('/create', verifyToken, function (req, res, next) {
     var data = req.body;
     console.log(data, '---sai===');
@@ -79,19 +76,20 @@ router.post('/create', verifyToken, function (req, res, next) {
         // });
 
         var name1 = data.name;
-        reqDataSlug = name1.split(' ').join('_');
-        roleCode = reqDataSlug.toLowerCase();
+        reqDataSlug = name1.split(' ').join('');
+        data.roleCode = reqDataSlug.toLowerCase();
         var roleInfo = new Roles(data);
-        roleInfo.find({
+        Roles.find({
                 roleCode: data.roleCode
             },
             function (err, data) {
+                console.log(data, '-------rolecode----');
                 if (err) {
-                    result.errors.push(err.message);
+                    result.errors.push(err);
                     return res.json(result);
                 }
                 if (data.length > 0) {
-                    result.errors.push(err.message + 'Role already exists.');
+                    result.errors.push('Role already exists.');
                     return res.json(result);
                 }
                 roleInfo.save(function (err, resRole) {
@@ -143,24 +141,86 @@ router.put('/update', verifyToken, function (req, res, next) {
     } else {
         updateObj.updatedBy = loggedUser._id;
         updateObj.updatedOn = new Date();
-        Roles.updateOne({
-            _id: data._id
-        }, {
-            $set: updateObj
-        }, function (err, upRole) {
-            if (err) {
-                result.errors.push(err.message);
-                return res.json(result);
-            } else if (upRole.nModified) {
-                result.success = true;
-                result.result.push("Role updated successfully");
-                return res.json(result);
-            } else {
-                result.errors.push("No record found with this _id");
-                return res.json(result);
-            }
-        });
+
+        var name1 = data.name;
+        reqDataSlug = name1.split(' ').join('');
+        data.roleCode = reqDataSlug.toLowerCase();
+
+        Roles.find({
+                roleCode: data.roleCode
+            },
+            function (err, data1) {
+                // console.log(data1, '-------rolecode----');
+                if (err) {
+                    result.errors.push(err);
+                    return res.json(result);
+                }
+                if (data1.length > 0) {
+                    result.errors.push('Role already exists.');
+                    return res.json(result);
+                }
+                Roles.updateOne({
+                    _id: data._id
+                }, {
+                    $set: updateObj
+                }, function (err, upRole) {
+                    if (err) {
+                        result.errors.push(err.message);
+                        return res.json(result);
+                    } else if (upRole.nModified) {
+                        result.success = true;
+                        result.result.push("Role updated successfully");
+                        return res.json(result);
+                    } else {
+                        result.errors.push("No record found with this _id");
+                        return res.json(result);
+                    }
+                });
+            });
+
+
+
     }
+});
+
+router.delete('/:id', verifyToken, function (req, res) {
+    var result = {
+        success: false,
+        result: [],
+        errors: []
+    }
+    var errors = [];
+    var loggedUser = req.loggedUser;
+    var data = req.body;
+    var updateObj = {};
+    if (!data._id) {
+        errors.push("_id is required");
+    }
+    // if (loggedUser.role != "admin") {
+    //     result.errors.push("You are not authorized to delete Meter Type");
+    //     return res.json(result);
+    // } else {
+    updateObj.removedBy = loggedUser._id;
+    updateObj.removedOn = new Date();
+    updateObj.active = false;
+    Roles.updateOne({
+        _id: id
+    }, {
+        $set: updateObj
+    }, function (err, upMeter) {
+        if (err) {
+            result.errors.push(err.message);
+            return res.json(result);
+        } else if (upMeter.nModified) {
+            result.success = true;
+            result.result.push("Roles deleted successfully");
+            return res.json(result);
+        } else {
+            result.errors.push("No record found with this id");
+            return res.json(result);
+        }
+    });
+    // }
 });
 
 module.exports = router;
