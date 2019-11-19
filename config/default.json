@@ -1,10 +1,10 @@
 {
     "dbConfig": {
-        "host": "13.234.144.50",
+        "host": "13.235.182.245",
         "port": 27017,
-        "dbName": "blacklake",
-        "username": "blacklake_user",
-        "password": "3wV3Ef765eK6AJts"
+        "dbName": "black-lake",
+        "username": "black-lake_user",
+        "password": "3wV3Ef765eK6AJts1"
     },
     "secretkey": "itsyourwish@blacklake",
     "tokenExpireTime": "8h",
