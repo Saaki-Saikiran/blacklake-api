@@ -9,10 +9,10 @@
     "secretkey": "itsyourwish@blacklake",
     "tokenExpireTime": "8h",
     "mail": {
-        "service": "gmail",
+        "service": "Gmail",
         "auth": {
-            "user": "info@gmail.com",
-            "pass": "Welcome#324"
+            "user": "madishetti.saikiran@gmail.com",
+            "pass": "SAIkiran@12345"
         }
     }
 }

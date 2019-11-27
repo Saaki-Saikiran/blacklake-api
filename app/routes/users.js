@@ -15,6 +15,10 @@ var tokenExpireTime = config.get('tokenExpireTime');
 
 var verifyToken = require('../auth/tokenValidator');
 
+var nodemailer = require("nodemailer");
+var mailConfig = config.get("mail");
+var transporter = nodemailer.createTransport(mailConfig);
+
 const saltRounds = 10;
 
 router.post('/list', verifyToken, function (req, res, next) {
@@ -125,7 +129,6 @@ router.post('/create', function (req, res, next) {
     }
 });
 
-
 router.put('/update', verifyToken, function (req, res, next) {
     var data = req.body;
     console.log('-----------saikiran------------');
@@ -195,93 +198,44 @@ router.put('/update', verifyToken, function (req, res, next) {
 
 });
 
-
-// router.delete('/:id', verifyToken, function (req, res) {
-//     var result = {
-//         success: false,
-//         result: [],
-//         errors: []
-//     }
-//     var errors = [];
-//     var loggedUser = req.loggedUser;
-//     var data = req.body;
-//     var updateObj = {};
-//     if (!data._id) {
-//         errors.push("_id is required");
-//     }
-//     // if (loggedUser.role != "admin") {
-//     //     result.errors.push("You are not authorized to delete Meter Type");
-//     //     return res.json(result);
-//     // } else {
-//     updateObj.removedBy = loggedUser._id;
-//     updateObj.removedOn = new Date();
-//     updateObj.active = false;
-//     Users.updateOne({
-//         _id: id
-//     }, {
-//         $set: updateObj
-//     }, function (err, upMeter) {
-//         if (err) {
-//             result.errors.push(err.message);
-//             return res.json(result);
-//         } else if (upMeter.nModified) {
-//             result.success = true;
-//             result.result.push("Roles deleted successfully");
-//             return res.json(result);
-//         } else {
-//             result.errors.push("No record found with this id");
-//             return res.json(result);
-//         }
-//     });
-//     // }
-// });
-
-router.put('/updateProfile', verifyToken, function (req, res, next) {
-    var data = req.body;
-    var errors = [];
+router.delete('/:id', verifyToken, function (req, res) {
     var result = {
         success: false,
-        errors: [],
-        result: []
-    };
-    var updateObj = {};
+        result: [],
+        errors: []
+    }
+    var errors = [];
     var loggedUser = req.loggedUser;
-    updateObj.updatedOn = new Date();
-    updateObj.updatedBy = loggedUser._id;
-    if (data.fname) {
-        updateObj.fname = data.fname;
+    var data = req.body;
+    var updateObj = {};
+    if (!data._id) {
+        errors.push("_id is required");
     }
-    if (data.lname) {
-        updateObj.lname = data.lname;
-    }
-    if (data.phone) {
-        updateObj.phone = data.phone;
-    }
-    if (data.profilepic) {
-        updateObj.profilepic = data.profilepic
-    }
-    if (errors.length) {
-        result.errors = errors;
-        return res.json(result);
-    } else {
-        Users.updateOne({
-            _id: loggedUser._id
-        }, {
-            $set: updateObj
-        }, function (err, upObj) {
-            if (err) {
-                result.errors.push(err.message);
-                return res.json(result);
-            } else if (upObj.nModified) {
-                result.success = true;
-                result.result.push("User updated successfully");
-                return res.json(result);
-            } else {
-                result.errors.push("No User found with this id");
-                return res.json(result);
-            }
-        });
-    }
+    // if (loggedUser.role != "admin") {
+    //     result.errors.push("You are not authorized to delete Meter Type");
+    //     return res.json(result);
+    // } else {
+    updateObj.removedBy = loggedUser._id;
+    updateObj.removedOn = new Date();
+    updateObj.active = false;
+    Users.updateOne({
+        _id: id
+    }, {
+        $set: updateObj
+    }, function (err, upMeter) {
+        if (err) {
+            result.errors.push(err.message);
+            return res.json(result);
+        } else if (upMeter.nModified) {
+            result.success = true;
+            result.result.push("Users deleted successfully");
+            return res.json(result);
+        } else {
+            result.errors.push("No record found with this id");
+            return res.json(result);
+        }
+    });
+    // }
 });
 
 router.put('/changePassword', verifyToken, function (req, res, next) {
@@ -293,7 +247,7 @@ router.put('/changePassword', verifyToken, function (req, res, next) {
     var errors = [];
     var data = req.body;
     var loggedUser = req.loggedUser;
-    if (data.currentPassword) {
+    if (!data.currentPassword) {
         errors.push("currentPassword is required");
     }
     if (!data.newPassword) {
@@ -354,6 +308,80 @@ router.put('/changePassword', verifyToken, function (req, res, next) {
     }
 });
 
+
+router.post('/forgotPassword', function (req, res, next) {
+    console.log(req.body, '---------sai----------');
+    var result = {
+        success: false,
+        errors: [],
+        result: []
+    };
+    var data = req.body;
+    var errors = [];
+    if (!data.email) {
+        errors.push("email is required");
+    }
+    if (errors.length) {
+        result.errors = errors;
+        return res.json(result)
+    } else {
+        Users.findOne({
+            email: data.email
+        }, function (err, resUser) {
+            if (err) {
+                result.errors.push(err.message);
+                return res.json(result);
+            } else if (resUser) {
+                var newPassword = shortid.generate();
+                bcrypt.hash(newPassword, saltRounds, function (err, hash) {
+                    if (err) {
+                        result.errors.push(err);
+                        return res.json(result);
+                    } else {
+                        Users.updateOne({
+                            _id: resUser._id
+                        }, {
+                            $set: {
+                                password: hash
+                            }
+                        }, function (err, upUser) {
+                            if (err) {
+                                result.errors.push(err.message);
+                                return res.json(result);
+                            } else if (upUser.nModified) {
+                                console.log(mailConfig, '------mailConfig-------');
+                                var mailOptions = {
+                                    from: mailConfig.auth.user,
+                                    to: data.email, // list of receivers
+                                    //    cc: data.cc, // list of receivers
+                                    //  bcc: data.bcc, // list of receivers
+                                    subject: 'Forget Password ✔', // Subject line
+                                    html: 'Hi Your New Password is :' + newPassword
+                                };
+                                transporter.sendMail(mailOptions, function (error, info) {
+                                    if (error) {
+                                        result.errors.push(error);
+                                        return res.json(result);
+                                    } else if (info) {
+                                        result.success = true;
+                                        result.result.push("Email Sent successfully");
+                                        return res.json(result);
+                                    }
+                                });
+                            } else {
+                                result.errors.push("New Password updation failed");
+                                return res.json(result);
+                            }
+                        });
+                    }
+                });
+            } else {
+                result.errors.push("No account found this email");
+                return res.json(result);
+            }
+        });
+    }
+});
 
 router.post('/auth/login', function (req, res, next) {
     var result = {
