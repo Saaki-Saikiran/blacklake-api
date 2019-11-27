@@ -11,8 +11,8 @@
     "mail": {
         "service": "Gmail",
         "auth": {
-            "user": "madishetti.saikiran@gmail.com",
-            "pass": "SAIkiran@12345"
+            "user": "ouremail@gmail.com",
+            "pass": "*******"
         }
     }
 }
