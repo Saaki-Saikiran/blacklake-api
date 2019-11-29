@@ -198,26 +198,24 @@ router.put('/update', verifyToken, function (req, res, next) {
 
 });
 
-router.delete('/:id', verifyToken, function (req, res) {
+router.delete('/:id', verifyToken, function (req, res, next) {
+    var id = req.params.id;
     var result = {
         success: false,
         result: [],
         errors: []
     }
-    var errors = [];
     var loggedUser = req.loggedUser;
-    var data = req.body;
-    var updateObj = {};
-    if (!data._id) {
-        errors.push("_id is required");
+    var errors = [];
+    var updateObj = {
+        isActive: false,
+        removedBy: loggedUser._id,
+        removedOn: new Date()
     }
     // if (loggedUser.role != "admin") {
     //     result.errors.push("You are not authorized to delete Meter Type");
     //     return res.json(result);
     // } else {
-    updateObj.removedBy = loggedUser._id;
-    updateObj.removedOn = new Date();
-    updateObj.active = false;
     Users.updateOne({
         _id: id
     }, {
@@ -352,7 +350,7 @@ router.post('/forgotPassword', function (req, res, next) {
                                 console.log(mailConfig, '------mailConfig-------');
                                 var mailOptions = {
                                     from: mailConfig.auth.user,
-                                    to: data.email, // list of receivers
+                                    to: 'saikiran.madishetti@trakitnow.com', // list of receivers
                                     //    cc: data.cc, // list of receivers
                                     //  bcc: data.bcc, // list of receivers
                                     subject: 'Forget Password ✔', // Subject line

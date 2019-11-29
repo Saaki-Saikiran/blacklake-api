@@ -140,23 +140,25 @@ router.put('/update', verifyToken, function (req, res, next) {
     }
 });
 
-router.delete('/:id', verifyToken, function (req, res) {
+router.delete('/:id', verifyToken, function (req, res, next) {
+    var id = req.params.id;
     var result = {
         success: false,
         result: [],
         errors: []
     }
-    var id = req.params.id;
-    var errors = [];
     var loggedUser = req.loggedUser;
-    var updateObj = {};
+    var errors = [];
+    var updateObj = {
+        active: false,
+        removedBy: loggedUser._id,
+        removedOn: new Date()
+    }
+    console.log(id, '--id--');
     // if (loggedUser.role != "admin") {
     //     result.errors.push("You are not authorized to delete Meter Type");
     //     return res.json(result);
     // } else {
-    updateObj.removedBy = loggedUser._id;
-    updateObj.removedOn = new Date();
-    updateObj.active = false;
     Metertypes.updateOne({
         _id: id
     }, {
@@ -167,7 +169,7 @@ router.delete('/:id', verifyToken, function (req, res) {
             return res.json(result);
         } else if (upMeter.nModified) {
             result.success = true;
-            result.result.push("Meter Type deleted successfully");
+            result.result.push("Metertypes deleted successfully");
             return res.json(result);
         } else {
             result.errors.push("No record found with this id");
@@ -176,5 +178,6 @@ router.delete('/:id', verifyToken, function (req, res) {
     });
     // }
 });
+
 
 module.exports = router;
