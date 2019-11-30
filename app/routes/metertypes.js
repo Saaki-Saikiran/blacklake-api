@@ -36,6 +36,7 @@ router.post('/list', verifyToken, function (req, res, next) {
 });
 
 router.post('/create', verifyToken, function (req, res, next) {
+    console.log(req.body, '-------');
     var data = req.body;
     var result = {
         success: false,

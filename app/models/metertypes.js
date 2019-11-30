@@ -12,16 +12,7 @@ var meterTypes = mongoose.Schema({
         required: true,
         unique: true
     },
-    attribute: [{
-        isBillable: {
-            type: Boolean,
-            default: false
-        },
-        isCommon: {
-            type: Boolean,
-            default: false
-        }
-    }],
+    attribute: [],
     description: {
         type: String,
         required: true
