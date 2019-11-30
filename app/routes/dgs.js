@@ -20,7 +20,9 @@ router.post('/list', verifyToken, function (req, res, next) {
         var fields = (data.fields) ? data.fields : {};
         var pagination = (data.pagination) ? data.pagination : {};
         var sort = (data.sort) ? data.sort : undefined;
-        DGs.find(query, fields, pagination).sort(sort).populate('createdBy', {
+        DGs.find(query, fields, pagination).sort(sort).populate('meterSerialNumberID', {
+            meterSerialNumber: 1
+        }).populate('createdBy', {
             username: 1
         }).lean().exec(function (err, resVehicles) {
             if (err) {
@@ -44,14 +46,15 @@ router.post('/create', verifyToken, function (req, res, next) {
     }
     var errors = [];
     var loggedUser = req.loggedUser;
+    console.log('loggedUser====', loggedUser);
     if (!data.dgSerialNumber) {
         errors.push("dgSerialNumber is required");
     }
     if (!data.model) {
         errors.push("model is required");
     }
-    if (!data.meterSerialNumber) {
-        errors.push("meterSerialNumber is required");
+    if (!data.meterSerialNumberID) {
+        errors.push("meterSerialNumberID is required");
     }
     if (!data.yearMake) {
         errors.push("yearMake is required");
@@ -99,8 +102,8 @@ router.put('/update', verifyToken, function (req, res, next) {
     if (data.model) {
         updateObj.model = data.model;
     }
-    if (data.meterSerialNumber) {
-        updateObj.meterSerialNumber = data.meterSerialNumber;
+    if (data.meterSerialNumberID) {
+        updateObj.meterSerialNumberID = data.meterSerialNumberID;
     }
     if (data.yearMake) {
         updateObj.yearMake = data.yearMake;

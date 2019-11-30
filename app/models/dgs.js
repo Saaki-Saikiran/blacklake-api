@@ -16,10 +16,15 @@ var DGs = mongoose.Schema({
         type: String,
         required: true
     },
-    meterSerialNumber: {
+    // meterSerialNumber: {
+    //     type: String,
+    //     required: true,
+    //     unique: true
+    // },
+    meterSerialNumberID: {
         type: String,
         required: true,
-        unique: true
+        ref: "meters"
     },
     yearMake: {
         type: Number,

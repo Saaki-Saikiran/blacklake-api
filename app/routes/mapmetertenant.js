@@ -20,18 +20,27 @@ router.post('/list', verifyToken, function (req, res, next) {
         var fields = (data.fields) ? data.fields : {};
         var pagination = (data.pagination) ? data.pagination : {};
         var sort = (data.sort) ? data.sort : undefined;
-        meterTenants.find(query, fields, pagination).sort(sort).populate('createdBy', {
-            username: 1
-        }).lean().exec(function (err, resVehicles) {
-            if (err) {
-                result.errors.push(err.message);
-                return res.json(result);
-            } else {
-                result.result = resVehicles;
-                result.success = true;
-                return res.json(result);
-            }
-        });
+        meterTenants.find(query, fields, pagination).sort(sort)
+            .populate('deptMeterNumberID', {
+                deptMeterNumber: 1
+            }).populate('meterSerialNumberID', {
+                meterSerialNumber: 1
+            }).populate('floorID', {
+                floor: 1
+            }).populate('tenantID', {
+                tenantName: 1
+            }).populate('createdBy', {
+                username: 1
+            }).lean().exec(function (err, resVehicles) {
+                if (err) {
+                    result.errors.push(err.message);
+                    return res.json(result);
+                } else {
+                    result.result = resVehicles;
+                    result.success = true;
+                    return res.json(result);
+                }
+            });
     }
 });
 
@@ -44,11 +53,11 @@ router.post('/create', verifyToken, function (req, res, next) {
     }
     var errors = [];
     var loggedUser = req.loggedUser;
-    if (!data.deptMeterNumber) {
+    if (!data.deptMeterNumberID) {
         errors.push("dept Meter Number is required");
     }
-    if (!data.meterSerialNumber) {
-        errors.push("meterSerialNumber is required");
+    if (!data.meterSerialNumberID) {
+        errors.push("meterSerialNumberID is required");
     }
     if (!data.meterType) {
         errors.push("meterType is required");
@@ -59,11 +68,11 @@ router.post('/create', verifyToken, function (req, res, next) {
     if (!data.block) {
         errors.push("block is required");
     }
-    if (!data.floor) {
-        errors.push("floor is required");
+    if (!data.floorID) {
+        errors.push("floorID is required");
     }
-    if (!data.tenantName) {
-        errors.push("tenantName is required");
+    if (!data.tenantID) {
+        errors.push("tenantID is required");
     }
     if (!data.contactNumber) {
         errors.push("contactNumber is required");
@@ -105,11 +114,11 @@ router.put('/update', verifyToken, function (req, res, next) {
     if (!data._id) {
         errors.push("_id is required");
     }
-    if (data.deptMeterNumber) {
-        updateObj.deptMeterNumber = data.deptMeterNumber;
+    if (data.deptMeterNumberID) {
+        updateObj.deptMeterNumberID = data.deptMeterNumberID;
     }
-    if (data.meterSerialNumber) {
-        updateObj.meterSerialNumber = data.meterSerialNumber;
+    if (data.meterSerialNumberID) {
+        updateObj.meterSerialNumberID = data.meterSerialNumberID;
     }
     if (data.meterType) {
         updateObj.meterType = data.meterType;
@@ -120,11 +129,11 @@ router.put('/update', verifyToken, function (req, res, next) {
     if (data.block) {
         updateObj.block = data.block;
     }
-    if (data.floor) {
-        updateObj.floor = data.floor;
+    if (data.floorID) {
+        updateObj.floorID = data.floorID;
     }
-    if (data.tenantName) {
-        updateObj.tenantName = data.tenantName;
+    if (data.tenantID) {
+        updateObj.tenantID = data.tenantID;
     }
     if (data.contactNumber) {
         updateObj.contactNumber = data.contactNumber;

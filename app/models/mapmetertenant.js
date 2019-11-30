@@ -7,13 +7,15 @@ var meterTenants = mongoose.Schema({
         type: String,
         default: shortid.generate
     },
-    deptMeterNumber: {
-        type: Number,
-    },
-    meterSerialNumber: {
+    deptMeterNumberID: {
         type: String,
         required: true,
-        // unique: true
+        ref: "deptMeters"
+    },
+    meterSerialNumberID: {
+        type: String,
+        required: true,
+        ref: "meters"
     },
     meterType: {
         type: String,
@@ -27,14 +29,15 @@ var meterTenants = mongoose.Schema({
         type: String,
         required: true
     },
-    floor: {
-        type: String,
-        required: true
-    },
-    tenantName: {
+    floorID: {
         type: String,
         required: true,
-        unique: true
+        ref: "floors"
+    },
+    tenantID: {
+        type: String,
+        required: true,
+        ref: "tenants"
     },
     contactNumber: {
         type: String,
