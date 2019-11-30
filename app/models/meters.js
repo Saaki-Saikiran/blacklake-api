@@ -20,9 +20,14 @@ var meters = mongoose.Schema({
         type: String,
         required: true
     },
-    deptMeterNumber: {
-        type: Number,
-        required: true
+    // deptMeterNumber: {
+    //     type: Number,
+    //     required: true
+    // },
+    deptMeterNumberID: {
+        type: String,
+        required: true,
+        ref: "deptMeters"
     },
     sourceType: {
         type: String,

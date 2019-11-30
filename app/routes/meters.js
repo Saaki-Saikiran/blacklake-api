@@ -20,7 +20,9 @@ router.post('/list', verifyToken, function (req, res, next) {
         var fields = (data.fields) ? data.fields : {};
         var pagination = (data.pagination) ? data.pagination : {};
         var sort = (data.sort) ? data.sort : undefined;
-        Meters.find(query, fields, pagination).sort(sort).populate('createdBy', {
+        Meters.find(query, fields, pagination).sort(sort).populate('deptMeterNumberID', {
+            deptMeterNumber: 1
+        }).populate('createdBy', {
             username: 1
         }).lean().exec(function (err, resVehicles) {
             if (err) {
@@ -53,8 +55,8 @@ router.post('/create', verifyToken, function (req, res, next) {
     if (!data.meterType) {
         errors.push("meterType is required");
     }
-    if (!data.deptMeterNumber) {
-        errors.push("deptMeterNumber is required");
+    if (!data.deptMeterNumberID) {
+        errors.push("deptMeterNumberID is required");
     }
     if (!data.sourceType) {
         errors.push("sourceType is required");
@@ -117,8 +119,8 @@ router.put('/update', verifyToken, function (req, res, next) {
     if (data.meterType) {
         updateObj.meterType = data.meterType;
     }
-    if (data.deptMeterNumber) {
-        updateObj.deptMeterNumber = data.deptMeterNumber;
+    if (data.deptMeterNumberID) {
+        updateObj.deptMeterNumberID = data.deptMeterNumberID;
     }
     if (data.sourceType) {
         updateObj.sourceType = data.sourceType;
