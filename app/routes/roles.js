@@ -146,55 +146,58 @@ router.put('/update', verifyToken, function (req, res, next) {
         reqDataSlug = name1.split(' ').join('');
         data.roleCode = reqDataSlug.toLowerCase();
 
-        Roles.updateOne({
-            _id: data._id
-        }, {
-            $set: updateObj
-        }, function (err, upRole) {
-            if (err) {
-                result.errors.push(err.message);
-                return res.json(result);
-            } else if (upRole.nModified) {
-                result.success = true;
-                result.result.push("Role updated successfully");
-                return res.json(result);
-            } else {
-                result.errors.push("No record found with this _id");
-                return res.json(result);
-            }
-        });
+        // Roles.updateOne({
+        //     _id: data._id
+        // }, {
+        //     $set: updateObj
+        // }, function (err, upRole) {
+        //     if (err) {
+        //         result.errors.push(err.message);
+        //         return res.json(result);
+        //     } else if (upRole.nModified) {
+        //         result.success = true;
+        //         result.result.push("Role updated successfully");
+        //         return res.json(result);
+        //     } else {
+        //         result.errors.push("No record found with this _id");
+        //         return res.json(result);
+        //     }
+        // });
 
-        // Roles.find({
-        //         roleCode: data.roleCode
-        //     },
-        //     function (err, data1) {
-        //         // console.log(data1, '-------rolecode----');
-        //         if (err) {
-        //             result.errors.push(err);
-        //             return res.json(result);
-        //         }
-        //         if (data1.length > 0) {
-        //             result.errors.push('Role already exists.');
-        //             return res.json(result);
-        //         }
-        //         Roles.updateOne({
-        //             _id: data._id
-        //         }, {
-        //             $set: updateObj
-        //         }, function (err, upRole) {
-        //             if (err) {
-        //                 result.errors.push(err.message);
-        //                 return res.json(result);
-        //             } else if (upRole.nModified) {
-        //                 result.success = true;
-        //                 result.result.push("Role updated successfully");
-        //                 return res.json(result);
-        //             } else {
-        //                 result.errors.push("No record found with this _id");
-        //                 return res.json(result);
-        //             }
-        //         });
-        //     });
+        Roles.find({
+                roleCode: data.roleCode,
+                _id: {
+                    $ne: data._id
+                }
+            },
+            function (err, data1) {
+                // console.log(data1, '-------rolecode----');
+                if (err) {
+                    result.errors.push(err);
+                    return res.json(result);
+                }
+                if (data1.length > 0) {
+                    result.errors.push('Role already exists.');
+                    return res.json(result);
+                }
+                Roles.updateOne({
+                    _id: data._id
+                }, {
+                    $set: updateObj
+                }, function (err, upRole) {
+                    if (err) {
+                        result.errors.push(err.message);
+                        return res.json(result);
+                    } else if (upRole.nModified) {
+                        result.success = true;
+                        result.result.push("Role updated successfully");
+                        return res.json(result);
+                    } else {
+                        result.errors.push("No record found with this _id");
+                        return res.json(result);
+                    }
+                });
+            });
 
 
 
