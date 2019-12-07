@@ -85,6 +85,13 @@ var mapmetertenantRouter = require('./app/routes/mapmetertenant');
 //USER MANAGEMENT MODULE
 var rolesRouter = require('./app/routes/roles');
 
+//MASTERS
+var gatewaymasterRouter = require('./app/routes/gatewaymaster');
+var metermasterRouter = require('./app/routes/metermaster');
+var meterparamsmasterRouter = require('./app/routes/meterparamsmaster');
+var panelmasterRouter = require('./app/routes/panelmaster');
+var sourcemeterRouter = require('./app/routes/sourcemeter');
+
 // app.use('/', indexRouter);
 
 //ADMIN MODULE
@@ -99,6 +106,13 @@ app.use('/dgs', dgsRouter);
 app.use('/mapmetertenant', mapmetertenantRouter);
 //USER MANAGEMENT MODULE
 app.use('/roles', rolesRouter);
+
+//master modules
+app.use('/sourcemeter', sourcemeterRouter);
+app.use('/panelmaster', panelmasterRouter);
+app.use('/meterparamsmaster', meterparamsmasterRouter);
+app.use('/metermaster', metermasterRouter);
+app.use('/gatewaymaster', gatewaymasterRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
