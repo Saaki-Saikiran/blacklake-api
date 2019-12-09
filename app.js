@@ -90,7 +90,7 @@ var gatewaymasterRouter = require('./app/routes/gatewaymaster');
 var metermasterRouter = require('./app/routes/metermaster');
 var meterparamsmasterRouter = require('./app/routes/meterparamsmaster');
 var panelmasterRouter = require('./app/routes/panelmaster');
-var sourcemeterRouter = require('./app/routes/sourcemeter');
+var sourcemasterRouter = require('./app/routes/sourcemaster');
 
 // app.use('/', indexRouter);
 
@@ -108,7 +108,7 @@ app.use('/mapmetertenant', mapmetertenantRouter);
 app.use('/roles', rolesRouter);
 
 //master modules
-app.use('/sourcemeter', sourcemeterRouter);
+app.use('/sourcemaster', sourcemasterRouter);
 app.use('/panelmaster', panelmasterRouter);
 app.use('/meterparamsmaster', meterparamsmasterRouter);
 app.use('/metermaster', metermasterRouter);

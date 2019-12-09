@@ -11,7 +11,7 @@ var metermaster = mongoose.Schema({
         type: Number,
         required: true
     },
-    modelName: {
+    meterModelName: {
         type: String,
         required: true
     },

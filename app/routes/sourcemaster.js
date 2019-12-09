@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var Sourcemaster = require('../models/sourcemeter');
+var Sourcemaster = require('../models/sourcemaster');
 var verifyToken = require('../auth/tokenValidator');
 
 router.post('/list', verifyToken, function (req, res, next) {
