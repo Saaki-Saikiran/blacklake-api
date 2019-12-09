@@ -44,8 +44,35 @@ router.post('/create', verifyToken, function (req, res, next) {
     }
     var errors = [];
     var loggedUser = req.loggedUser;
-    if (!data.meterParams) {
-        errors.push("meterParams is required");
+    if (!data.meterParamsId) {
+        errors.push("meterParamsId is required");
+    }
+    if (!data.meterModelId) {
+        errors.push("meterModelId is required");
+    }
+    if (!data.parameterName) {
+        errors.push("parameterName is required");
+    }
+    if (!data.description) {
+        errors.push("description is required");
+    }
+    if (!data.units) {
+        errors.push("units is required");
+    }
+    if (!data.dataType) {
+        errors.push("dataType is required");
+    }
+    if (!data.scaling) {
+        errors.push("scaling is required");
+    }
+    if (!data.modRegister) {
+        errors.push("modRegister is required");
+    }
+    if (!data.registerLength) {
+        errors.push("registerLength is required");
+    }
+    if (typeof data.isSupported !== "boolean") {
+        errors.push("isSupported(Boolean Type) is required");
     }
     data.createdBy = loggedUser._id;
     data.createdOn = new Date();
@@ -80,8 +107,37 @@ router.put('/update', verifyToken, function (req, res, next) {
     if (!data._id) {
         errors.push("_id is required");
     }
-    if (data.meterParams) {
+    if (data.meterParamsId) {
+        updateObj.meterParamsId = data.meterParamsId;
+    }
+    if (data.meterModelId) {
+        updateObj.meterModelId = data.meterModelId;
+    }
+    if (data.parameterName) {
+        updateObj.parameterName = data.parameterName;
+    }
+    if (data.description) {
+        updateObj.description = data.description;
+    }
+    if (data.units) {
+        updateObj.units = data.units;
+    }
+    if (data.dataType) {
+        updateObj.dataType = data.dataType;
+    }
+    if (data.scaling) {
         updateObj.meterParams = data.meterParams;
+    }
+    if (data.modRegister) {
+        updateObj.modRegister = data.modRegister;
+    }
+    if (data.registerLength) {
+        updateObj.registerLength = data.registerLength;
+    }
+    if (typeof data.isSupported !== "boolean") {
+        errors.push("isSupported(Boolean Type) is required");
+    } else {
+        updateObj.isSupported = data.isSupported;
     }
     if (errors.length) {
         result.errors = errors;

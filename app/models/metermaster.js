@@ -7,7 +7,36 @@ var metermaster = mongoose.Schema({
         type: String,
         default: shortid.generate
     },
-    meterModel: {
+    meterModelId: {
+        type: Number,
+        required: true
+    },
+    modelName: {
+        type: String,
+        required: true
+    },
+    manufacturer: {
+        type: String,
+        required: true
+    },
+    startingRegister: {
+        type: Number,
+        required: true
+    },
+    length: {
+        type: Number,
+        required: true
+    },
+    dataType: {
+        type: String,
+        required: true
+    },
+    isSupported: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
+    comments: {
         type: String,
         required: true
     },

@@ -7,6 +7,25 @@ var sourcemaster = mongoose.Schema({
         type: String,
         default: shortid.generate
     },
+    sourceTypeId: {
+        type: Number,
+        required: true
+    },
+    isAutomated: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
+    isUtilitySupported: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
+    isGeneratorSupported: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
     sourceType: {
         type: String,
         required: true

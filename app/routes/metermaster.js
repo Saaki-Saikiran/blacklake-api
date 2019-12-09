@@ -44,8 +44,29 @@ router.post('/create', verifyToken, function (req, res, next) {
     }
     var errors = [];
     var loggedUser = req.loggedUser;
-    if (!data.meterModel) {
-        errors.push("meterModel is required");
+    if (!data.meterModelId) {
+        errors.push("meterModelId is required");
+    }
+    if (!data.modelName) {
+        errors.push("modelName is required");
+    }
+    if (!data.manufacturer) {
+        errors.push("manufacturer is required");
+    }
+    if (!data.startingRegister) {
+        errors.push("startingRegister is required");
+    }
+    if (!data.length) {
+        errors.push("length is required");
+    }
+    if (!data.dataType) {
+        errors.push("dataType is required");
+    }
+    if (typeof data.isSupported !== "boolean") {
+        errors.push("isSupported(Boolean Type) is required");
+    }
+    if (!data.comments) {
+        errors.push("comments is required");
     }
     data.createdBy = loggedUser._id;
     data.createdOn = new Date();
@@ -80,8 +101,31 @@ router.put('/update', verifyToken, function (req, res, next) {
     if (!data._id) {
         errors.push("_id is required");
     }
-    if (data.meterModel) {
-        updateObj.meterModel = data.meterModel;
+    if (data.meterModelId) {
+        updateObj.meterModelId = data.meterModelId;
+    }
+    if (data.modelName) {
+        updateObj.modelName = data.modelName;
+    }
+    if (data.manufacturer) {
+        updateObj.manufacturer = data.manufacturer;
+    }
+    if (data.startingRegister) {
+        updateObj.startingRegister = data.startingRegister;
+    }
+    if (data.length) {
+        updateObj.length = data.length;
+    }
+    if (data.dataType) {
+        updateObj.dataType = data.dataType;
+    }
+    if (typeof data.isSupported !== "boolean") {
+        errors.push("isSupported(Boolean Type) is required");
+    } else {
+        updateObj.isSupported = data.isSupported;
+    }
+    if (data.comments) {
+        updateObj.comments = data.comments;
     }
     if (errors.length) {
         result.errors = errors;

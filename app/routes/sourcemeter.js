@@ -44,9 +44,22 @@ router.post('/create', verifyToken, function (req, res, next) {
     }
     var errors = [];
     var loggedUser = req.loggedUser;
-    if (!data.meterParams) {
-        errors.push("meterParams is required");
+    if (!data.sourceTypeId) {
+        errors.push("sourceTypeId is required");
     }
+    if (typeof data.isAutomated !== "boolean") {
+        errors.push("isAutomated(Boolean Type) is required");
+    }
+    if (typeof data.isUtilitySupported !== "boolean") {
+        errors.push("isUtilitySupported(Boolean Type) is required");
+    }
+    if (typeof data.isGeneratorSupported !== "boolean") {
+        errors.push("isGeneratorSupported(Boolean Type) is required");
+    }
+    if (!data.sourceType) {
+        errors.push("SourceType is required");
+    }
+
     data.createdBy = loggedUser._id;
     data.createdOn = new Date();
     if (errors.length) {
@@ -80,8 +93,28 @@ router.put('/update', verifyToken, function (req, res, next) {
     if (!data._id) {
         errors.push("_id is required");
     }
-    if (data.meterParams) {
-        updateObj.meterParams = data.meterParams;
+    if (data.sourceTypeId) {
+        updateObj.sourceTypeId = data.sourceTypeId;
+    }
+    if (typeof data.isAutomated === "boolean") {
+        updateObj.isAutomated = data.isAutomated;
+    } else {
+        errors.push("isAutomated(boolean type) is required");
+    }
+
+    if (typeof data.isUtilitySupported === "boolean") {
+        updateObj.isUtilitySupported = data.isUtilitySupported;
+    } else {
+        errors.push("isUtilitySupported(boolean type) is required");
+    }
+
+    if (typeof data.isGeneratorSupported === "boolean") {
+        updateObj.isGeneratorSupported = data.isGeneratorSupported;
+    } else {
+        errors.push("isGeneratorSupported(boolean type) is required");
+    }
+    if (data.sourceType) {
+        updateObj.sourceType = data.sourceType;
     }
     if (errors.length) {
         result.errors = errors;

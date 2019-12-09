@@ -44,8 +44,41 @@ router.post('/create', verifyToken, function (req, res, next) {
     }
     var errors = [];
     var loggedUser = req.loggedUser;
-    if (!data.gateway) {
-        errors.push("gateway is required");
+    if (!data.gatewayId) {
+        errors.push("gatewayId is required");
+    }
+    if (!data.name) {
+        errors.push("name is required");
+    }
+    if (!data.gatewayModel) {
+        errors.push("gatewayModel is required");
+    }
+    if (!data.location) {
+        errors.push("location is required");
+    }
+    if (!data.tcp_COM_Type) {
+        errors.push("tcp_COM_Type is required");
+    }
+    if (!data.ip) {
+        errors.push("ip is required");
+    }
+    if (!data.tcp_COM_PortNo) {
+        errors.push("tcp_COM_PortNo is required");
+    }
+    if (!data.baudRate) {
+        errors.push("baudRate is required");
+    }
+    if (!data.parity) {
+        errors.push("parity is required");
+    }
+    if (!data.stopBits) {
+        errors.push("stopBits is required");
+    }
+    if (!data.dataSize) {
+        errors.push("dataSize is required");
+    }
+    if (!data.comments) {
+        errors.push("comments is required");
     }
     data.createdBy = loggedUser._id;
     data.createdOn = new Date();
@@ -80,9 +113,43 @@ router.put('/update', verifyToken, function (req, res, next) {
     if (!data._id) {
         errors.push("_id is required");
     }
-    if (data.gateway) {
-        updateObj.gateway = data.gateway;
+    if (data.gatewayId) {
+        updateObj.gatewayId = data.gatewayId;
     }
+    if (data.name) {
+        updateObj.name = data.name;
+    }
+    if (data.gatewayModel) {
+        updateObj.gatewayModel = data.gatewayModel;
+    }
+    if (data.location) {
+        updateObj.location = data.location;
+    }
+    if (data.tcp_COM_Type) {
+        updateObj.tcp_COM_Type = data.tcp_COM_Type;
+    }
+    if (data.ip) {
+        updateObj.ip = data.ip;
+    }
+    if (data.tcp_COM_PortNo) {
+        updateObj.tcp_COM_PortNo = data.tcp_COM_PortNo;
+    }
+    if (data.baudRate) {
+        updateObj.baudRate = data.baudRate;
+    }
+    if (data.parity) {
+        updateObj.parity = data.parity;
+    }
+    if (data.stopBits) {
+        updateObj.stopBits = data.stopBits;
+    }
+    if (data.dataSize) {
+        updateObj.dataSize = data.dataSize;
+    }
+    if (data.comments) {
+        updateObj.comments = data.comments;
+    }
+
     if (errors.length) {
         result.errors = errors;
         return res.json(result);
@@ -119,7 +186,7 @@ router.delete('/:id', verifyToken, function (req, res) {
     var errors = [];
     var loggedUser = req.loggedUser;
     var updateObj = {};
-    // if (loggedUser.role != "admin") {
+    // if (loggedUser.role = "admin") {
     //     result.errors.push("You are not authorized to delete Gatewaymaster");
     //     return res.json(result);
     // } else {
