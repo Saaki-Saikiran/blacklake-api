@@ -21,7 +21,8 @@ var gatewaymaster = mongoose.Schema({
     },
     location: {
         type: String,
-        required: true
+        required: true,
+        ref: "deptmeters"
     },
     tcp_COM_Type: {
         type: Number,

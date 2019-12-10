@@ -13,7 +13,8 @@ var panelmaster = mongoose.Schema({
     },
     buildingName: {
         type: String,
-        required: true
+        required: true,
+        ref: "floors"
     },
     active: {
         type: Boolean,

@@ -20,18 +20,21 @@ router.post('/list', verifyToken, function (req, res, next) {
         var fields = (data.fields) ? data.fields : {};
         var pagination = (data.pagination) ? data.pagination : {};
         var sort = (data.sort) ? data.sort : undefined;
-        Panelmaster.find(query, fields, pagination).sort(sort).populate('createdBy', {
-            username: 1
-        }).lean().exec(function (err, resVehicles) {
-            if (err) {
-                result.errors.push(err.message);
-                return res.json(result);
-            } else {
-                result.result = resVehicles;
-                result.success = true;
-                return res.json(result);
-            }
-        });
+        Panelmaster.find(query, fields, pagination).sort(sort)
+            .populate('buildingName', {
+                building: 1
+            }).populate('createdBy', {
+                username: 1
+            }).lean().exec(function (err, resVehicles) {
+                if (err) {
+                    result.errors.push(err.message);
+                    return res.json(result);
+                } else {
+                    result.result = resVehicles;
+                    result.success = true;
+                    return res.json(result);
+                }
+            });
     }
 });
 
