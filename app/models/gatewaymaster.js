@@ -22,10 +22,10 @@ var gatewaymaster = mongoose.Schema({
     location: {
         type: String,
         required: true,
-        ref: "deptmeters"
+        // ref: "deptmeters"
     },
     tcp_COM_Type: {
-        type: Number,
+        type: String,
         required: true
     },
     ip: {
@@ -86,4 +86,4 @@ var gatewaymaster = mongoose.Schema({
     strict: true
 });
 
-module.exports = mongoose.model("gatewaymaster", gatewaymaster);
+module.exports = mongoose.model("gateway-master", gatewaymaster);

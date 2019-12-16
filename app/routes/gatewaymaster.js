@@ -21,9 +21,10 @@ router.post('/list', verifyToken, function (req, res, next) {
         var pagination = (data.pagination) ? data.pagination : {};
         var sort = (data.sort) ? data.sort : undefined;
         Gatewaymaster.find(query, fields, pagination).sort(sort)
-            .populate('location', {
-                location: 1
-            }).populate('createdBy', {
+            // .populate('location', {
+            // location: 1
+            // })
+            .populate('createdBy', {
                 username: 1
             }).lean().exec(function (err, resVehicles) {
                 if (err) {
