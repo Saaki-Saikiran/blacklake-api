@@ -47,8 +47,8 @@ router.post('/create', verifyToken, function (req, res, next) {
     if (!data.meterModelId) {
         errors.push("meterModelId is required");
     }
-    if (!data.modelName) {
-        errors.push("modelName is required");
+    if (!data.meterModelName) {
+        errors.push("meterModelName is required");
     }
     if (!data.manufacturer) {
         errors.push("manufacturer is required");
@@ -104,8 +104,8 @@ router.put('/update', verifyToken, function (req, res, next) {
     if (data.meterModelId) {
         updateObj.meterModelId = data.meterModelId;
     }
-    if (data.modelName) {
-        updateObj.modelName = data.modelName;
+    if (data.meterModelName) {
+        updateObj.meterModelName = data.meterModelName;
     }
     if (data.manufacturer) {
         updateObj.manufacturer = data.manufacturer;
