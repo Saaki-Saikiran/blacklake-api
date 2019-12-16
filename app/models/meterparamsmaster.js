@@ -12,7 +12,7 @@ var meterparamsmaster = mongoose.Schema({
         required: true
     },
     meterModelId: {
-        type: Number,
+        type: String,
         required: true,
         ref: "metermaster"
     },
