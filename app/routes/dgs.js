@@ -50,18 +50,18 @@ router.post('/create', verifyToken, function (req, res, next) {
     if (!data.dgSerialNumber) {
         errors.push("dgSerialNumber is required");
     }
-    if (!data.model) {
-        errors.push("model is required");
-    }
+    // if (!data.model) {
+    //     errors.push("model is required");
+    // }
     if (!data.meterSerialNumberID) {
         errors.push("meterSerialNumberID is required");
     }
-    if (!data.yearMake) {
-        errors.push("yearMake is required");
-    }
-    if (!data.description) {
-        errors.push("description is required");
-    }
+    // if (!data.yearMake) {
+    //     errors.push("yearMake is required");
+    // }
+    // if (!data.description) {
+    //     errors.push("description is required");
+    // }
 
     data.createdBy = loggedUser._id;
     data.createdOn = new Date();

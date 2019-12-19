@@ -50,15 +50,15 @@ router.post('/create', verifyToken, function (req, res, next) {
     if (!data.contactPersonName) {
         errors.push("contactPersonName is required");
     }
-    if (!data.contactNumber) {
-        errors.push("contactNumber is required");
-    }
-    if (!data.email) {
-        errors.push("email is required");
-    }
-    if (!data.comments) {
-        errors.push("comments is required");
-    }
+    // if (!data.contactNumber) {
+    //     errors.push("contactNumber is required");
+    // }
+    // if (!data.email) {
+    //     errors.push("email is required");
+    // }
+    // if (!data.comments) {
+    //     errors.push("comments is required");
+    // }
 
     data.createdBy = loggedUser._id;
     data.createdOn = new Date();

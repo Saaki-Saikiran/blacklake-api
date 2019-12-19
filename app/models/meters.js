@@ -51,7 +51,7 @@ var meters = mongoose.Schema({
     },
     comments: {
         type: String,
-        required: true
+        // required: true
     },
     active: {
         type: Boolean,

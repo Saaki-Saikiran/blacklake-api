@@ -14,7 +14,7 @@ var DGs = mongoose.Schema({
     },
     model: {
         type: String,
-        required: true
+        // required: true
     },
     // meterSerialNumber: {
     //     type: String,

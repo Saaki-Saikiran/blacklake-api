@@ -14,15 +14,15 @@ var deptMeters = mongoose.Schema({
     },
     location: {
         type: String,
-        required: true
+        // required: true
     },
     provider: {
         type: String,
-        required: true
+        // required: true
     },
     description: {
         type: String,
-        required: true
+        // required: true
     },
     active: {
         type: Boolean,

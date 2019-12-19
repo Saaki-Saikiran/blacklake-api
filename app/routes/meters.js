@@ -61,21 +61,21 @@ router.post('/create', verifyToken, function (req, res, next) {
     if (!data.sourceType) {
         errors.push("sourceType is required");
     }
-    if (!data.panel) {
-        errors.push("panel is required");
-    }
+    // if (!data.panel) {
+    //     errors.push("panel is required");
+    // }
     if (!data.gateway) {
         errors.push("gateway is required");
     }
-    if (!data.provider) {
-        errors.push("provider is required");
-    }
+    // if (!data.provider) {
+    //     errors.push("provider is required");
+    // }
     if (!data.multifyingFactor) {
         errors.push("multifyingFactor is required");
     }
-    if (!data.comments) {
-        errors.push("comments is required");
-    }
+    // if (!data.comments) {
+    //     errors.push("comments is required");
+    // }
 
     data.createdBy = loggedUser._id;
     data.createdOn = new Date();

@@ -47,15 +47,15 @@ router.post('/create', verifyToken, function (req, res, next) {
     if (!data.deptMeterNumber) {
         errors.push("dept Meter Number is required");
     }
-    if (!data.location) {
-        errors.push("location is required");
-    }
-    if (!data.provider) {
-        errors.push("provider is required");
-    }
-    if (!data.description) {
-        errors.push("description is required");
-    }
+    // if (!data.location) {
+    //     errors.push("location is required");
+    // }
+    // if (!data.provider) {
+    //     errors.push("provider is required");
+    // }
+    // if (!data.description) {
+    //     errors.push("description is required");
+    // }
     data.createdBy = loggedUser._id;
     data.createdOn = new Date();
     if (errors.length) {

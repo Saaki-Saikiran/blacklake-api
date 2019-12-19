@@ -53,12 +53,12 @@ router.post('/create', verifyToken, function (req, res, next) {
     if (!data.floor) {
         errors.push("floor is required");
     }
-    if (!data.occupantNumber) {
-        errors.push("occupantNumber is required");
-    }
-    if (!data.sqFts) {
-        errors.push("sqFts is required");
-    }
+    // if (!data.occupantNumber) {
+    //     errors.push("occupantNumber is required");
+    // }
+    // if (!data.sqFts) {
+    //     errors.push("sqFts is required");
+    // }
 
     data.createdBy = loggedUser._id;
     data.createdOn = new Date();
