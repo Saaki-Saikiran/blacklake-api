@@ -7,46 +7,50 @@ var meterTenants = mongoose.Schema({
         type: String,
         default: shortid.generate
     },
-    deptMeterNumberID: {
-        type: String,
-        required: true,
-        ref: "deptMeters"
-    },
+    // deptMeterNumberID: {
+    //     type: String,
+    //     required: true,
+    //     ref: "deptMeters"
+    // },
     meterSerialNumberID: {
         type: String,
         required: true,
         ref: "meters"
     },
-    meterType: {
-        type: String,
+    assignTenant: {
+        type: Boolean,
         required: true
     },
-    gatewayName: {
-        type: String,
-        required: true
-    },
-    block: {
-        type: String,
-        required: true
-    },
-    floorID: {
-        type: String,
-        required: true,
-        ref: "floors"
-    },
+    // meterType: {
+    //     type: String,
+    //     required: true
+    // },
+    // gatewayName: {
+    //     type: String,
+    //     required: true
+    // },
+    // block: {
+    //     type: String,
+    //     required: true
+    // },
+    // floorID: {
+    //     type: String,
+    //     required: true,
+    //     ref: "floors"
+    // },
     tenantID: {
         type: String,
         required: true,
         ref: "tenants"
     },
-    contactNumber: {
-        type: String,
-        // required: true
-    },
-    started: {
-        type: String,
-        required: true
-    },
+    // contactNumber: {
+    //     type: String,
+    //     // required: true
+    // },
+    // started: {
+    //     type: String,
+    //     required: true
+    // },
     active: {
         type: Boolean,
         default: true
