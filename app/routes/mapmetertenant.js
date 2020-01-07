@@ -3,6 +3,127 @@ var router = express.Router();
 var meterTenants = require('../models/mapmetertenant');
 var verifyToken = require('../auth/tokenValidator');
 
+// router.post('/list', verifyToken, function (req, res, next) {
+//     var result = {
+//         success: false,
+//         errors: [],
+//         result: []
+//     };
+//     var errors = [];
+//     var data = req.body;
+//     var loggedUser = req.loggedUser;
+//     if (errors.length) {
+//         result.errors = errors;
+//         return res.json(result);
+//     } else {
+//         var query = data.match ? data.match : {};
+//         var fields = (data.fields) ? data.fields : {};
+//         var pagination = (data.pagination) ? data.pagination : {};
+//         var sort = (data.sort) ? data.sort : undefined;
+//         meterTenants.aggregate([
+
+//                 {
+//                     $lookup: {
+//                         from: "users",
+//                         let: {
+//                             "user": "$createdBy"
+//                         },
+//                         pipeline: [{
+//                             $match: {
+//                                 $expr: {
+//                                     $and: [{
+//                                         $eq: ["$_id", "$$user"]
+//                                     }, ]
+//                                 }
+//                             }
+//                         }, {
+//                             $project: {
+//                                 username: 1
+//                             }
+//                         }],
+//                         as: "userDetails"
+//                     }
+//                 },
+//                 {
+//                     $unwind: {
+//                         path: "$userDetails",
+//                         preserveNullAndEmptyArrays: true
+//                     }
+//                 },
+
+
+//                 {
+//                     $lookup: {
+//                         from: "meters",
+//                         let: {
+//                             "meter": "$meterSerialNumberID"
+//                         },
+//                         pipeline: [{
+//                             $match: {
+//                                 $expr: {
+//                                     $and: [{
+//                                         $eq: ["$_id", "$$meter"]
+//                                     }, ]
+//                                 }
+//                             }
+//                         }],
+//                         as: "meterdet"
+//                     }
+//                 },
+//                 {
+//                     $unwind: {
+//                         path: "$meterdet",
+//                         preserveNullAndEmptyArrays: true
+//                     }
+//                 },
+//                 {
+//                     $group: {
+//                         _id: "$tenantID",
+//                         data: {
+//                             $push: "$$ROOT"
+//                         }
+//                     }
+//                 },
+//                 {
+//                     $lookup: {
+//                         from: "tenants",
+//                         let: {
+//                             "tenant": "$_id"
+//                         },
+//                         pipeline: [{
+//                             $match: {
+//                                 $expr: {
+//                                     $and: [{
+//                                         $eq: ["$_id", "$$tenant"]
+//                                     }, ]
+//                                 }
+//                             }
+//                         }],
+//                         as: "tenentdet"
+//                     }
+//                 },
+//                 {
+//                     $unwind: {
+//                         path: "$tenentdet",
+//                         preserveNullAndEmptyArrays: true
+//                     }
+//                 },
+
+
+//             ])
+//             .exec(function (err, resVehicles) {
+//                 if (err) {
+//                     result.errors.push(err.message);
+//                     return res.json(result);
+//                 } else {
+//                     result.result = resVehicles;
+//                     result.success = true;
+//                     return res.json(result);
+//                 }
+//             });
+//     }
+// });
+
 router.post('/list', verifyToken, function (req, res, next) {
     var result = {
         success: false,
@@ -20,98 +141,18 @@ router.post('/list', verifyToken, function (req, res, next) {
         var fields = (data.fields) ? data.fields : {};
         var pagination = (data.pagination) ? data.pagination : {};
         var sort = (data.sort) ? data.sort : undefined;
-        meterTenants.aggregate([
-
-                {
-                    $lookup: {
-                        from: "users",
-                        let: {
-                            "user": "$createdBy"
-                        },
-                        pipeline: [{
-                            $match: {
-                                $expr: {
-                                    $and: [{
-                                        $eq: ["$_id", "$$user"]
-                                    }, ]
-                                }
-                            }
-                        }, {
-                            $project: {
-                                username: 1
-                            }
-                        }],
-                        as: "userDetails"
-                    }
-                },
-                {
-                    $unwind: {
-                        path: "$userDetails",
-                        preserveNullAndEmptyArrays: true
-                    }
-                },
-
-
-                {
-                    $lookup: {
-                        from: "meters",
-                        let: {
-                            "meter": "$meterSerialNumberID"
-                        },
-                        pipeline: [{
-                            $match: {
-                                $expr: {
-                                    $and: [{
-                                        $eq: ["$_id", "$$meter"]
-                                    }, ]
-                                }
-                            }
-                        }],
-                        as: "meterdet"
-                    }
-                },
-                {
-                    $unwind: {
-                        path: "$meterdet",
-                        preserveNullAndEmptyArrays: true
-                    }
-                },
-                {
-                    $group: {
-                        _id: "$tenantID",
-                        data: {
-                            $push: "$$ROOT"
-                        }
-                    }
-                },
-                {
-                    $lookup: {
-                        from: "tenants",
-                        let: {
-                            "tenant": "$_id"
-                        },
-                        pipeline: [{
-                            $match: {
-                                $expr: {
-                                    $and: [{
-                                        $eq: ["$_id", "$$tenant"]
-                                    }, ]
-                                }
-                            }
-                        }],
-                        as: "tenentdet"
-                    }
-                },
-                {
-                    $unwind: {
-                        path: "$tenentdet",
-                        preserveNullAndEmptyArrays: true
-                    }
-                },
-
-
-            ])
-            .exec(function (err, resVehicles) {
+        meterTenants.find(query, fields, pagination).sort(sort)
+            .populate('tenantID', {
+                tenantName: 1
+            }).populate('meterSerialNumberID', {})
+            .populate('floorID', {
+                building: 1,
+                block: 1,
+                floor: 1,
+                occupantNumber: 1
+            }).populate('createdBy', {
+                username: 1
+            }).lean().exec(function (err, resVehicles) {
                 if (err) {
                     result.errors.push(err.message);
                     return res.json(result);

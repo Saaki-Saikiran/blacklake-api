@@ -20,7 +20,7 @@ var floors = mongoose.Schema({
         required: true
     },
     occupantNumber: {
-        type: Number,
+        type: String,
     },
     sqFts: {
         type: Number,
@@ -53,5 +53,15 @@ var floors = mongoose.Schema({
 }, {
     strict: true
 });
+
+floors.index({
+    building: 1,
+    block: 1,
+    floor: 1,
+    occupantNumber: 1
+}, {
+    unique: true
+})
+
 
 module.exports = mongoose.model("floors", floors);

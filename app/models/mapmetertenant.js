@@ -29,15 +29,15 @@ var meterTenants = mongoose.Schema({
     //     type: String,
     //     required: true
     // },
-    // block: {
-    //     type: String,
-    //     required: true
-    // },
-    // floorID: {
-    //     type: String,
-    //     required: true,
-    //     ref: "floors"
-    // },
+    buildingBlock: {
+        type: String,
+        required: true
+    },
+    floorID: {
+        type: String,
+        required: true,
+        ref: "floors"
+    },
     tenantID: {
         type: String,
         required: true,
@@ -74,7 +74,8 @@ var meterTenants = mongoose.Schema({
         type: String
     },
     removedOn: {
-        type: Date
+        type: Date,
+        ref: "users"
     },
 }, {
     strict: true
