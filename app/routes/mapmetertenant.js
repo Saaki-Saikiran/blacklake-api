@@ -195,9 +195,9 @@ router.post('/create', verifyToken, function (req, res, next) {
     if (!data.assignTenant) {
         errors.push("assignTenant is required");
     }
-    if (!data.tenantID) {
-        errors.push("tenantID is required");
-    }
+    // if (!data.tenantID) {
+    //     errors.push("tenantID is required");
+    // }
     // if (!data.contactNumber) {
     //     errors.push("contactNumber is required");
     // }
@@ -241,8 +241,8 @@ router.put('/update', verifyToken, function (req, res, next) {
     // if (data.deptMeterNumberID) {
     //     updateObj.deptMeterNumberID = data.deptMeterNumberID;
     // }
-    if (data.meterSerialNumberID) {
-        updateObj.meterSerialNumberID = data.meterSerialNumberID;
+    if (data.vacatedOn) {
+        updateObj.vacatedOn = data.vacatedOn;
     }
     // if (data.meterType) {
     //     updateObj.meterType = data.meterType;
@@ -256,12 +256,12 @@ router.put('/update', verifyToken, function (req, res, next) {
     // if (data.floorID) {
     //     updateObj.floorID = data.floorID;
     // }
-    if (data.assignTenant) {
-        updateObj.assignTenant = data.assignTenant;
-    }
-    if (data.tenantID) {
-        updateObj.tenantID = data.tenantID;
-    }
+    // if (data.assignTenant) {
+    //     updateObj.assignTenant = data.assignTenant;
+    // }
+    // if (data.tenantID) {
+    //     updateObj.tenantID = data.tenantID;
+    // }
     // if (data.contactNumber) {
     //     updateObj.contactNumber = data.contactNumber;
     // }

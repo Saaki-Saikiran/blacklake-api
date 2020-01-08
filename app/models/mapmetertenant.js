@@ -40,13 +40,16 @@ var meterTenants = mongoose.Schema({
     },
     tenantID: {
         type: String,
-        required: true,
+        // required: true,
         ref: "tenants"
     },
-    // contactNumber: {
-    //     type: String,
-    //     // required: true
-    // },
+    inactiveTenant: {
+        type: String,
+    },
+    vacatedOn: {
+        type: Date,
+        // required: true
+    },
     // started: {
     //     type: String,
     //     required: true
