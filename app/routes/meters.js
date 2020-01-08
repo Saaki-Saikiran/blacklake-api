@@ -106,6 +106,7 @@ router.put('/update', verifyToken, function (req, res, next) {
     var errors = [];
     var loggedUser = req.loggedUser;
     var data = req.body;
+    console.log(data, '-------------data----------', data.assignedToTenant);
     var updateObj = {};
     if (!data._id) {
         errors.push("_id is required");
@@ -140,6 +141,10 @@ router.put('/update', verifyToken, function (req, res, next) {
     if (data.comments) {
         updateObj.comments = data.comments;
     }
+    if ((data.assignedToTenant == true) || (data.assignedToTenant == false)) {
+        updateObj.assignedToTenant = data.assignedToTenant;
+    }
+
     if (errors.length) {
         result.errors = errors;
         return res.json(result);
