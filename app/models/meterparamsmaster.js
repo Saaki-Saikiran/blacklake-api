@@ -7,14 +7,14 @@ var meterparamsmaster = mongoose.Schema({
         type: String,
         default: shortid.generate
     },
-    meterParamsId: {
-        type: Number,
-        required: true
-    },
+    // meterParamsId: {
+    //     type: Number,
+    //     required: true
+    // },
     meterModelId: {
         type: String,
         required: true,
-        ref: "metermaster"
+        ref: "meterModel-master"
     },
     parameterName: {
         type: String,
@@ -47,7 +47,7 @@ var meterparamsmaster = mongoose.Schema({
     isSupported: {
         type: Boolean,
         required: true,
-        default: false
+        // default: false
     },
     active: {
         type: Boolean,
@@ -79,4 +79,4 @@ var meterparamsmaster = mongoose.Schema({
     strict: true
 });
 
-module.exports = mongoose.model("meterparamsmaster", meterparamsmaster);
+module.exports = mongoose.model("meterParams-master", meterparamsmaster);

@@ -343,3 +343,135 @@ db.getCollection('metertenants').aggregate([
 
 
 ])
+
+//modbus data pulling
+
+db.getCollection('gateway-masters').aggregate([{
+        $project: {
+            ip: 1,
+            tcp_COM_PortNo: 1
+        }
+    },
+
+    {
+        $lookup: {
+            from: "meters",
+            let: {
+                "gateID": "$_id"
+            },
+            pipeline: [{
+                $match: {
+                    $expr: {
+                        $and: [{
+                            $eq: ["$gateway", "$$gateID"]
+                        }, ]
+                    }
+                }
+            }, {
+                $project: {
+                    meterSerialNumber: 1,
+                    model: 1
+                }
+            }],
+            as: "test"
+        }
+    },
+    {
+        $unwind: {
+            path: "$test",
+            preserveNullAndEmptyArrays: false
+        }
+    },
+    {
+        $project: {
+            ip: 1,
+            tcp_COM_PortNo: 1,
+            meterSerialNumber: "$test.meterSerialNumber",
+            model: "$test.model"
+        }
+    },
+
+    {
+        $lookup: {
+            from: "metermasters",
+            let: {
+                "modelID": "$model"
+            },
+            pipeline: [{
+                $match: {
+                    $expr: {
+                        $and: [{
+                            $eq: ["$_id", "$$modelID"]
+                        }, ]
+                    }
+                }
+            }, {
+                $project: {
+                    startingRegister: 1,
+                    length: 1
+                }
+            }],
+            as: "test"
+        }
+    },
+    {
+        $unwind: {
+            path: "$test",
+            preserveNullAndEmptyArrays: false
+        }
+    },
+    {
+        $project: {
+            ip: 1,
+            tcp_COM_PortNo: 1,
+            meterSerialNumber: 1,
+            model: 1,
+            startingRegister: "$test.startingRegister",
+            length: "$test.length"
+        }
+    },
+
+    {
+        $lookup: {
+            from: "meterparamsmasters",
+            let: {
+                "paramID": "$model"
+            },
+            pipeline: [{
+                $match: {
+                    $expr: {
+                        $and: [{
+                            $eq: ["$meterModelId", "$$paramID"]
+                        }, ]
+                    }
+                }
+            }, {
+                $project: {
+                    modRegister: 1,
+                    scaling: 1
+                }
+            }],
+            as: "test"
+        }
+    },
+    {
+        $unwind: {
+            path: "$test",
+            preserveNullAndEmptyArrays: false
+        }
+    },
+    {
+        $project: {
+            ip: 1,
+            tcp_COM_PortNo: 1,
+            meterSerialNumber: 1,
+            model: 1,
+            startingRegister: 1,
+            length: 1,
+            modRegister: "$test.modRegister",
+            scaling: "$test.scaling"
+        }
+    },
+
+
+])

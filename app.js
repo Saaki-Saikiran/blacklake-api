@@ -151,7 +151,7 @@ app.use(function (req, res, next) {
 });
 
 //cron jobs
-var modbusJob = require('./app/jobs/modbus');
+// var modbusJob = require('./app/jobs/modbus');
 
 
 // error handler

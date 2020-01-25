@@ -7,10 +7,10 @@ var sourcemaster = mongoose.Schema({
         type: String,
         default: shortid.generate
     },
-    sourceTypeId: {
-        type: Number,
-        required: true
-    },
+    // sourceTypeId: {
+    //     type: Number,
+    //     required: true
+    // },
     isAutomated: {
         type: Boolean,
         required: true,
@@ -60,4 +60,4 @@ var sourcemaster = mongoose.Schema({
     strict: true
 });
 
-module.exports = mongoose.model("sourcemaster", sourcemaster);
+module.exports = mongoose.model("source-master", sourcemaster);

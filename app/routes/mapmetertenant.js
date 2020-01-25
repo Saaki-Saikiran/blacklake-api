@@ -143,7 +143,8 @@ router.post('/list', verifyToken, function (req, res, next) {
         var sort = (data.sort) ? data.sort : undefined;
         meterTenants.find(query, fields, pagination).sort(sort)
             .populate('tenantID', {
-                tenantName: 1
+                tenantName: 1,
+                active: 1
             }).populate('meterSerialNumberID', {})
             .populate('floorID', {
                 building: 1,

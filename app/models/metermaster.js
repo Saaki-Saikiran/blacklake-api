@@ -7,10 +7,10 @@ var metermaster = mongoose.Schema({
         type: String,
         default: shortid.generate
     },
-    meterModelId: {
-        type: Number,
-        required: true
-    },
+    // meterModelId: {
+    //     type: Number,
+    //     required: true
+    // },
     meterModelName: {
         type: String,
         required: true
@@ -70,4 +70,4 @@ var metermaster = mongoose.Schema({
     strict: true
 });
 
-module.exports = mongoose.model("metermaster", metermaster);
+module.exports = mongoose.model("meterModel-master", metermaster);

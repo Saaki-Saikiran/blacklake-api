@@ -44,9 +44,9 @@ router.post('/create', verifyToken, function (req, res, next) {
     }
     var errors = [];
     var loggedUser = req.loggedUser;
-    if (!data.sourceTypeId) {
-        errors.push("sourceTypeId is required");
-    }
+    // if (!data.sourceTypeId) {
+    //     errors.push("sourceTypeId is required");
+    // }
     if (typeof data.isAutomated !== "boolean") {
         errors.push("isAutomated(Boolean Type) is required");
     }
@@ -93,9 +93,9 @@ router.put('/update', verifyToken, function (req, res, next) {
     if (!data._id) {
         errors.push("_id is required");
     }
-    if (data.sourceTypeId) {
-        updateObj.sourceTypeId = data.sourceTypeId;
-    }
+    // if (data.sourceTypeId) {
+    //     updateObj.sourceTypeId = data.sourceTypeId;
+    // }
     if (typeof data.isAutomated === "boolean") {
         updateObj.isAutomated = data.isAutomated;
     } else {

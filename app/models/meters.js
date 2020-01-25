@@ -14,7 +14,8 @@ var meters = mongoose.Schema({
     },
     model: {
         type: String,
-        required: true
+        required: true,
+        ref: "meterModel-master"
     },
     meterType: {
         type: String,

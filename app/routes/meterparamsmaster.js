@@ -47,9 +47,9 @@ router.post('/create', verifyToken, function (req, res, next) {
     }
     var errors = [];
     var loggedUser = req.loggedUser;
-    if (!data.meterParamsId) {
-        errors.push("meterParamsId is required");
-    }
+    // if (!data.meterParamsId) {
+    //     errors.push("meterParamsId is required");
+    // }
     if (!data.meterModelId) {
         errors.push("meterModelId is required");
     }
@@ -110,9 +110,9 @@ router.put('/update', verifyToken, function (req, res, next) {
     if (!data._id) {
         errors.push("_id is required");
     }
-    if (data.meterParamsId) {
-        updateObj.meterParamsId = data.meterParamsId;
-    }
+    // if (data.meterParamsId) {
+    //     updateObj.meterParamsId = data.meterParamsId;
+    // }
     if (data.meterModelId) {
         updateObj.meterModelId = data.meterModelId;
     }

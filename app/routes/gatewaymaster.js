@@ -47,9 +47,9 @@ router.post('/create', verifyToken, function (req, res, next) {
     }
     var errors = [];
     var loggedUser = req.loggedUser;
-    if (!data.gatewayId) {
-        errors.push("gatewayId is required");
-    }
+    // if (!data.gatewayId) {
+    //     errors.push("gatewayId is required");
+    // }
     if (!data.name) {
         errors.push("name is required");
     }
@@ -116,9 +116,9 @@ router.put('/update', verifyToken, function (req, res, next) {
     if (!data._id) {
         errors.push("_id is required");
     }
-    if (data.gatewayId) {
-        updateObj.gatewayId = data.gatewayId;
-    }
+    // if (data.gatewayId) {
+    //     updateObj.gatewayId = data.gatewayId;
+    // }
     if (data.name) {
         updateObj.name = data.name;
     }

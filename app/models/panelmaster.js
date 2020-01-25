@@ -45,4 +45,4 @@ var panelmaster = mongoose.Schema({
     strict: true
 });
 
-module.exports = mongoose.model("panelmaster", panelmaster);
+module.exports = mongoose.model("panel-master", panelmaster);

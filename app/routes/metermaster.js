@@ -44,9 +44,9 @@ router.post('/create', verifyToken, function (req, res, next) {
     }
     var errors = [];
     var loggedUser = req.loggedUser;
-    if (!data.meterModelId) {
-        errors.push("meterModelId is required");
-    }
+    // if (!data.meterModelId) {
+    //     errors.push("meterModelId is required");
+    // }
     if (!data.meterModelName) {
         errors.push("meterModelName is required");
     }
@@ -101,9 +101,9 @@ router.put('/update', verifyToken, function (req, res, next) {
     if (!data._id) {
         errors.push("_id is required");
     }
-    if (data.meterModelId) {
-        updateObj.meterModelId = data.meterModelId;
-    }
+    // if (data.meterModelId) {
+    //     updateObj.meterModelId = data.meterModelId;
+    // }
     if (data.meterModelName) {
         updateObj.meterModelName = data.meterModelName;
     }

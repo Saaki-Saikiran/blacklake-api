@@ -22,6 +22,8 @@ router.post('/list', verifyToken, function (req, res, next) {
         var sort = (data.sort) ? data.sort : undefined;
         Meters.find(query, fields, pagination).sort(sort).populate('deptMeterNumberID', {
             deptMeterNumber: 1
+        }).populate('model', {
+            meterModelName: 1
         }).populate('createdBy', {
             username: 1
         }).lean().exec(function (err, resVehicles) {

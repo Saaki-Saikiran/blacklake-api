@@ -7,10 +7,10 @@ var gatewaymaster = mongoose.Schema({
         type: String,
         default: shortid.generate
     },
-    gatewayId: {
-        type: Number,
-        required: true
-    },
+    // gatewayId: {
+    //     type: Number,
+    //     required: true
+    // },
     name: {
         type: String,
         required: true
