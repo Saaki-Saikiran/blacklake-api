@@ -8,7 +8,7 @@ var meters = mongoose.Schema({
         default: shortid.generate
     },
     meterSerialNumber: {
-        type: String,
+        type: Number,
         required: true,
         unique: true
     },
