@@ -43,7 +43,7 @@ var meters = mongoose.Schema({
     gateway: {
         type: String,
         required: true,
-        ref: "gateway-master"
+        ref: "gateway-masters"
     },
     provider: {
         type: String,
