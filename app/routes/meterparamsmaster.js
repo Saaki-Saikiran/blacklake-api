@@ -22,7 +22,7 @@ router.post('/list', verifyToken, function (req, res, next) {
         var sort = (data.sort) ? data.sort : undefined;
         Meterparamsmaster.find(query, fields, pagination).sort(sort)
             .populate('meterModelId', {
-                meterModelId: 1
+                meterModelName: 1,
             }).populate('createdBy', {
                 username: 1
             }).lean().exec(function (err, resVehicles) {
