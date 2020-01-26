@@ -32,15 +32,18 @@ var meters = mongoose.Schema({
     },
     sourceType: {
         type: String,
-        required: true
+        required: true,
+        ref: "source-masters"
     },
     panel: {
         type: String,
-        // required: true
+        required: true,
+        ref: "panel-masters"
     },
     gateway: {
         type: String,
-        required: true
+        required: true,
+        ref: "gateway-master"
     },
     provider: {
         type: String,
