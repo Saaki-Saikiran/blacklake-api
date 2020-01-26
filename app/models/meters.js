@@ -37,7 +37,7 @@ var meters = mongoose.Schema({
     },
     panel: {
         type: String,
-        required: true,
+        // required: true,
         ref: "panel-masters"
     },
     gateway: {
