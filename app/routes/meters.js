@@ -21,7 +21,9 @@ router.post('/list', verifyToken, function (req, res, next) {
         var pagination = (data.pagination) ? data.pagination : {};
         var sort = (data.sort) ? data.sort : undefined;
         Meters.find(query, fields, pagination).sort(sort)
-            .populate('sourceType', {
+            .populate('meterType', {
+                type: 1
+            }).populate('sourceType', {
                 sourceType: 1
             }).populate('panel', {
                 panelName: 1

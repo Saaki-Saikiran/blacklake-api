@@ -19,7 +19,8 @@ var meters = mongoose.Schema({
     },
     meterType: {
         type: String,
-        required: true
+        required: true,
+        ref: "metertypes"
     },
     // deptMeterNumber: {
     //     type: Number,
@@ -33,17 +34,17 @@ var meters = mongoose.Schema({
     sourceType: {
         type: String,
         required: true,
-        ref: "source-masters"
+        ref: "source-master"
     },
     panel: {
         type: String,
         // required: true,
-        ref: "panel-masters"
+        ref: "panel-master"
     },
     gateway: {
         type: String,
         required: true,
-        ref: "gateway-masters"
+        ref: "gateway-master"
     },
     provider: {
         type: String,
