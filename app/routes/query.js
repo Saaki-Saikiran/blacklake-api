@@ -737,3 +737,13 @@ db.getCollection('metertenants').aggregate([{
 //     fromDate: 2020 - 01 - 27
 //     toDate: 2020 - 01 - 27
 // }
+
+
+//POST
+
+//URL: http://localhost:5001/reports/consumptionReport
+
+// input: {
+//     fromDate: 2020 - 01 - 27
+//     toDate: 2020 - 01 - 27
+// }
