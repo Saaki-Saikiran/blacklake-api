@@ -123,11 +123,13 @@ var meterparamsmasterRouter = require('./app/routes/meterparamsmaster');
 var panelmasterRouter = require('./app/routes/panelmaster');
 var sourcemasterRouter = require('./app/routes/sourcemaster');
 
+var reportsRouter = require('./app/routes/reports');
 // app.use('/', indexRouter);
 
 //ADMIN MODULE
 app.use('/users', usersRouter);
 app.use('/metertypes', metertypesRouter);
+
 //METER MANAGEMENT MODULE
 app.use('/deptmeters', deptmetersRouter);
 app.use('/meters', metersRouter);
@@ -135,6 +137,7 @@ app.use('/tenants', tenantsRouter);
 app.use('/floors', floorsRouter);
 app.use('/dgs', dgsRouter);
 app.use('/mapmetertenant', mapmetertenantRouter);
+
 //USER MANAGEMENT MODULE
 app.use('/roles', rolesRouter);
 
@@ -144,6 +147,9 @@ app.use('/panelmaster', panelmasterRouter);
 app.use('/meterparamsmaster', meterparamsmasterRouter);
 app.use('/metermaster', metermasterRouter);
 app.use('/gatewaymaster', gatewaymasterRouter);
+
+//REPORTS MODULE
+app.use('/reports', reportsRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

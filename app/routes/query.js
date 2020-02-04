@@ -475,3 +475,265 @@ db.getCollection('gateway-masters').aggregate([{
 
 
 ])
+
+
+// meter logs report table data from modbus-loggings
+
+db.getCollection('modbus-loggings').aggregate([
+    // {$lookup: {from: "meters",let: {"gateID": "$meterId"},
+    // pipeline: [{$match: {$expr: {$and: [{$eq: ["$_id", "$$gateID"]} ]} }}, 
+    // {$project: {meterSerialNumber: 1,model: 1, meterType:1}}],as: "test"}},
+
+    {
+        $addFields: {
+            date: {
+                $dateFromString: {
+                    dateString: '$date',
+                    format: "%Y-%m-%d"
+                }
+            }
+        }
+    },
+    {
+        $match: {
+            "meterId": "24zE2vix",
+            date: {
+                $gte: ISODate("2020-01-27"),
+                $lte: ISODate("2020-01-29")
+            }
+        }
+    },
+    {
+        $unwind: '$modbusObj'
+    },
+    {
+        $group: {
+            _id: '$meterId',
+            modbusObj: {
+                $push: '$modbusObj'
+            }
+        }
+    }
+])
+
+//to get meter wise block, floor, tenant, model, type and meter seial number
+
+db.getCollection('metertenants').aggregate([{
+        $match: {
+            "meterSerialNumberID": "24zE2vix"
+        }
+    },
+    {
+        $project: {
+            "buildingBlock": 1,
+            "floorID": 1,
+            "tenantID": 1,
+            "meterSerialNumberID": 1
+        }
+    },
+
+    {
+        $lookup: {
+            from: "floors",
+            let: {
+                "gateID1": "$floorID"
+            },
+            pipeline: [{
+                    $match: {
+                        $expr: {
+                            $and: [{
+                                $eq: ["$_id", "$$gateID1"]
+                            }]
+                        }
+                    }
+                },
+                {
+                    $project: {
+                        floor: 1,
+                        block: 1
+                    }
+                }
+            ],
+            as: "test"
+        }
+    },
+    {
+        $unwind: '$test'
+    },
+    {
+        $project: {
+            floor: '$test.floor',
+            block: '$test.block',
+            "tenantID": 1,
+            "meterSerialNumberID": 1
+        }
+    },
+
+    {
+        $lookup: {
+            from: "tenants",
+            let: {
+                "gateID1": "$tenantID"
+            },
+            pipeline: [{
+                    $match: {
+                        $expr: {
+                            $and: [{
+                                $eq: ["$_id", "$$gateID1"]
+                            }]
+                        }
+                    }
+                },
+                {
+                    $project: {
+                        tenantName: 1
+                    }
+                }
+            ],
+            as: "test"
+        }
+    },
+    {
+        $unwind: '$test'
+    },
+    {
+        $project: {
+            floor: 1,
+            block: 1,
+            tenantName: '$test.tenantName',
+            "meterSerialNumberID": 1
+        }
+    },
+
+
+    {
+        $lookup: {
+            from: "meters",
+            let: {
+                "gateID": "$meterSerialNumberID"
+            },
+            pipeline: [{
+                    $match: {
+                        $expr: {
+                            $and: [{
+                                $eq: ["$_id", "$$gateID"]
+                            }]
+                        }
+                    }
+                },
+                {
+                    $project: {
+                        meterSerialNumber: 1,
+                        model: 1,
+                        meterType: 1
+                    }
+                }
+            ],
+            as: "test"
+        }
+    },
+    {
+        $unwind: '$test'
+    },
+
+    {
+        $project: {
+            floor: 1,
+            block: 1,
+            tenantName: 1,
+            meterSerialNumberID: '$test.meterSerialNumber',
+            model: '$test.model',
+            meterType: '$test.meterType'
+        }
+    },
+
+    {
+        $lookup: {
+            from: "metertypes",
+            let: {
+                "gateID": "$meterType"
+            },
+            pipeline: [{
+                    $match: {
+                        $expr: {
+                            $and: [{
+                                $eq: ["$_id", "$$gateID"]
+                            }]
+                        }
+                    }
+                },
+                {
+                    $project: {
+                        type: 1
+                    }
+                }
+            ],
+            as: "test"
+        }
+    },
+    {
+        $unwind: '$test'
+    },
+
+    {
+        $project: {
+            floor: 1,
+            block: 1,
+            tenantName: 1,
+            meterSerialNumberID: 1,
+            model: 1,
+            meterType: '$test.type'
+        }
+    },
+
+    {
+        $lookup: {
+            from: "metermodel-masters",
+            let: {
+                "gateID": "$model"
+            },
+            pipeline: [{
+                    $match: {
+                        $expr: {
+                            $and: [{
+                                $eq: ["$_id", "$$gateID"]
+                            }]
+                        }
+                    }
+                },
+                {
+                    $project: {
+                        meterModelName: 1
+                    }
+                }
+            ],
+            as: "test"
+        }
+    },
+    {
+        $unwind: '$test'
+    },
+
+    {
+        $project: {
+            floor: 1,
+            block: 1,
+            tenantName: 1,
+            meterSerialNumberID: 1,
+            model: '$test.meterModelName',
+            meterType: 1
+        }
+    },
+])
+
+
+
+//POST
+
+//URL: http: //localhost:5001/reports/meterLogsReport
+
+// input: {
+//     meterID: "24zE2vix"
+//     fromDate: 2020 - 01 - 27
+//     toDate: 2020 - 01 - 27
+// }
